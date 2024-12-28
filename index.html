@@ -15,7 +15,6 @@
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     }
 
-    /* Mode clair (par défaut) */
     body {
       background-color: #f7f7f7;
       color: #333;
@@ -24,18 +23,12 @@
       transition: background 0.3s, color 0.3s;
     }
 
-    /* Mode sombre */
-    body.dark-mode {
-      background-color: #121212;
-      color: #e0e0e0;
-    }
-
     header,
     nav,
     section,
     footer {
       width: 100%;
-      max-width: 400px; /* Pour s'adapter à l'iPhone 12 (~390px) */
+      max-width: 400px;
       margin: auto;
       padding: 1em;
     }
@@ -54,25 +47,10 @@
       color: inherit;
       padding: 0.5em 1em;
       cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    .nav-bar button:hover {
-      opacity: 0.7;
     }
     .nav-bar button.active {
       font-weight: bold;
-      color: #3B82F6; /* Couleur d'accent en mode clair */
-    }
-    body.dark-mode .nav-bar button.active {
-      color: #7C3AED; /* Couleur d'accent si on veut la changer en mode sombre, par ex. */
-    }
-
-    /* Bouton Dark Mode */
-    #toggleDarkModeBtn {
-      font-size: 0.9rem;
-      border: 1px solid;
-      border-radius: 4px;
-      padding: 0.3em 0.6em;
+      color: #3B82F6;
     }
 
     /* TITRES ET SECTIONS */
@@ -81,11 +59,7 @@
     }
     h1 {
       font-size: 1.6rem;
-      color: #3B82F6; /* Couleur d'accent principale */
-      transition: color 0.3s;
-    }
-    body.dark-mode h1 {
-      color: #7C3AED; /* Couleur d'accent en mode sombre */
+      color: #3B82F6; 
     }
     h2 {
       font-size: 1.2rem;
@@ -108,32 +82,26 @@
       cursor: pointer;
       margin: 1em 0;
       font-weight: 500;
-      transition: transform 0.2s, opacity 0.2s;
+      transition: transform 0.2s;
     }
     .btn:hover {
       transform: scale(0.98);
     }
 
-    /* En mode sombre, on change éventuellement le gradient si on veut */
-    body.dark-mode .btn {
-      background: linear-gradient(45deg, #6d28d9, #3b82f6);
-    }
-
-    /* STRUCTURE DES SECTIONS (HIDDEN/ACTIVE) */
+    /* SECTIONS (HIDDEN/ACTIVE) */
     section {
-      display: none; /* Par défaut on masque tout, on affiche seulement la section active via JS */
+      display: none; 
     }
     section.active {
       display: block;
       animation: fadeIn 0.4s ease-in-out;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
 
-    /* CARTES DE PROGRAMME */
+    /* PROGRAM CARDS */
     .program-card {
       background: #fff;
       border-radius: 8px;
@@ -146,30 +114,36 @@
     .program-card:hover {
       background: #f0f4ff;
     }
-    body.dark-mode .program-card {
-      background: #1f1f1f;
-      box-shadow: none;
-    }
-    .program-card:hover {
-      background: #f0f4ff;
-    }
-    body.dark-mode .program-card:hover {
-      background: #2f2f2f;
-    }
 
-    .program-title {
-      font-weight: bold;
+    /* MODAL TUTORIEL */
+    .tutorial-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      display: none; /* hidden par défaut */
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 1em;
+      text-align: center;
+    }
+    .tutorial-overlay.active {
+      display: flex;
+    }
+    .tutorial-box {
+      max-width: 300px;
+    }
+    .tutorial-box h2 {
       margin-bottom: 0.5em;
+      font-size: 1.4rem;
     }
-    .program-exercises {
-      font-size: 0.9rem;
-      color: #555;
-    }
-    body.dark-mode .program-exercises {
-      color: #bbb;
+    .tutorial-box p {
+      margin-bottom: 1em;
     }
 
-    /* LISTE D'EXERCICES DÉTAILLÉS (DRAG & DROP) */
+    /* EXERCISE LIST + DRAG & DROP */
     .exercise-list {
       list-style: none;
       margin: 1em 0;
@@ -184,51 +158,45 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, opacity 0.3s;
     }
-    .exercise-item.done {
-      background-color: #e4fce3;
+    .exercise-item.dragged {
+      opacity: 0.5;
+      border: 2px dashed #3B82F6; /* icône plus marquée */
     }
-    body.dark-mode .exercise-item {
-      background: #1f1f1f;
-    }
-    body.dark-mode .exercise-item.done {
-      background-color: #226633; /* Un vert sombre */
-    }
-
     .exercise-item.drag-over {
       outline: 2px dashed #3B82F6;
       outline-offset: -4px;
     }
-
-    .exercise-name {
-      font-weight: 500;
+    .exercise-item.done {
+      background-color: #e4fce3;
     }
-    .exercise-details {
-      font-size: 0.85rem;
-      color: #777;
-      margin-top: 0.3em;
-    }
-    body.dark-mode .exercise-details {
-      color: #999;
+    .exercise-left {
+      flex: 1;
+      margin-right: 1em;
     }
 
-    /* BOUTON “DONE” */
+    /* PROGRESSION VISUELLE : barres ou cercles */
+    .exercise-progress {
+      display: flex;
+      gap: 4px;
+    }
+    .circle {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ddd;
+    }
+    .circle.filled {
+      background: #3B82F6;
+    }
+
+    /* DONE-BTN masquée (remplacée par la zone de progression) */
     .done-btn {
-      background: #34D399; /* vert menthe / success */
-      color: #fff;
-      border: none;
-      padding: 0.6em 0.8em;
-      border-radius: 4px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: opacity 0.3s;
-    }
-    .done-btn:hover {
-      opacity: 0.9;
+      display: none;
     }
 
-    /* SECTION DE RÉCOMPENSES (PROGRESSION) */
+    /* FIN DE SEANCE - REWARDS BOX */
     .rewards-box {
       background: #fff;
       border-radius: 8px;
@@ -237,22 +205,14 @@
       box-shadow: 0 0 4px rgba(0,0,0,0.1);
       margin-bottom: 1em;
     }
-    body.dark-mode .rewards-box {
-      background: #1f1f1f;
-      box-shadow: none;
-    }
-
     .reward-message {
       font-size: 1rem;
       margin-top: 1em;
       color: #3B82F6;
       font-weight: bold;
     }
-    body.dark-mode .reward-message {
-      color: #7C3AED;
-    }
 
-    /* Carte de résumé hebdo */
+    /* WEEKLY SUMMARY */
     .week-summary {
       background-color: #fff;
       border-radius: 8px;
@@ -261,19 +221,11 @@
       margin-bottom: 1em;
       text-align: center;
     }
-    body.dark-mode .week-summary {
-      background-color: #1f1f1f;
-      box-shadow: none;
-    }
     .week-summary h3 {
       margin-bottom: 0.5em;
       color: #3B82F6;
       font-size: 1rem;
     }
-    body.dark-mode .week-summary h3 {
-      color: #7C3AED;
-    }
-
     .week-days {
       display: flex;
       justify-content: space-between;
@@ -287,21 +239,42 @@
       display: flex; 
       align-items: center; 
       justify-content: center;
-      flex-direction: column;
       font-size: 0.75rem;
       color: #333;
-      transition: background-color 0.3s;
     }
     .day-circle.done {
-      background-color: #34D399; /* vert si séance effectuée */
+      background-color: #34D399;
       color: #fff;
     }
-    body.dark-mode .day-circle {
-      background-color: #333;
-      color: #e0e0e0;
+
+    /* OBJECTIFS / HISTORIQUE */
+    .objectives-box, .history-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1em;
+      margin-bottom: 1em;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
     }
-    body.dark-mode .day-circle.done {
-      background-color: #3fbf8b; /* Un vert un peu plus “sombre” */
+    .objectives-box h3, .history-box h3 {
+      color: #3B82F6;
+      margin-bottom: 0.5em;
+    }
+
+    /* INPUTS */
+    .form-group {
+      margin-bottom: 1em;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.3em;
+      font-weight: bold;
+    }
+    input[type="number"], select {
+      width: 100%;
+      padding: 0.5em;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
     }
 
     /* CONFETTI CANVAS */
@@ -321,44 +294,63 @@
   <!-- CANVAS POUR CONFETTI -->
   <canvas id="confetti-canvas"></canvas>
 
+  <!-- TUTORIAL OVERLAY (bulles explicatives) -->
+  <div class="tutorial-overlay" id="tutorialOverlay">
+    <div class="tutorial-box">
+      <h2>Bienvenue !</h2>
+      <p>Découvre comment utiliser cette application :
+        <br>- Clique ou double-clique sur les cercles pour valider les séries.
+        <br>- Déplace (drag & drop) les exercices dans l’ordre de ton choix.
+        <br>- Configure le nombre de séries avant de commencer.
+      </p>
+      <button class="btn" id="closeTutorialBtn">C’est parti !</button>
+    </div>
+  </div>
+
   <!-- BARRE DE NAVIGATION SIMPLIFIÉE -->
   <nav class="nav-bar">
-    <div>
-      <button id="navHome" class="active">Accueil</button>
-      <button id="navProgram">Programme</button>
-      <button id="navProgress">Progression</button>
-    </div>
-    <button id="toggleDarkModeBtn">Mode Sombre</button>
+    <button id="navHome" class="active">Accueil</button>
+    <button id="navProgram">Programme</button>
+    <button id="navProgress">Progression</button>
   </nav>
 
   <!-- SECTION ACCUEIL -->
   <section id="home" class="active">
     <header>
-      <h1>Bienvenue sur Mon MVP Sport</h1>
+      <h1>MVP Sport</h1>
     </header>
     <p>Salut Sportif ! Prêt pour ta séance du jour ?</p>
-    <!-- TINY HABIT / MICRO-CHALLENGE -->
-    <p><em>Micro-challenge : Fais 5 squats rapides pour t’échauffer !</em></p>
+    <!-- Personnalisation : Demande d’objectif hebdo -->
+    <div class="form-group">
+      <label for="weeklyGoal">Combien de séances par semaine vises-tu ?</label>
+      <input type="number" id="weeklyGoal" min="1" max="14" value="3" />
+    </div>
+    <p>Ex. : “Fais <span id="weeklyGoalDisplay">3</span> séances cette semaine pour déverrouiller un nouveau badge !”</p>
     <button class="btn" id="btnStart">Lancer ma séance</button>
   </section>
 
-  <!-- SECTION PROGRAMME (LISTE DES SÉANCES) -->
+  <!-- SECTION PROGRAMME -->
   <section id="program">
     <h2>Mon Programme Hebdo</h2>
 
-    <!-- Séance 1 : Jambes -->
+    <!-- Choix du nombre de séries -->
+    <div class="form-group">
+      <label for="userSetsChoice">Choisis ton nombre de séries (par exercice) :</label>
+      <select id="userSetsChoice">
+        <option value="3">3 séries</option>
+        <option value="4" selected>4 séries</option>
+        <option value="5">5 séries</option>
+      </select>
+    </div>
+
     <div class="program-card" onclick="window.openSessionDetails('legs')">
       <div class="program-title">Séance 1 : Jambes</div>
       <div class="program-exercises">Squats, Fentes, Presse à cuisses, Soulevé de terre, Mollets</div>
     </div>
-
-    <!-- Séance 2 : Dos & Biceps -->
     <div class="program-card" onclick="window.openSessionDetails('backBiceps')">
       <div class="program-title">Séance 2 : Dos & Biceps</div>
       <div class="program-exercises">Tractions, Rowing, Tirage, Curl biceps, Curl marteau</div>
     </div>
-
-    <!-- Séance 3 : Épaules & Triceps -->
     <div class="program-card" onclick="window.openSessionDetails('shouldersTriceps')">
       <div class="program-title">Séance 3 : Épaules & Triceps</div>
       <div class="program-exercises">Développé militaire, Élévations latérales, Oiseau, Développé couché serré, Extension triceps</div>
@@ -372,7 +364,6 @@
     <h2 id="sessionTitle">Détails de la Séance</h2>
     <ul class="exercise-list" id="exerciseList">
       <!-- Les exercices seront injectés dynamiquement via JavaScript -->
-      <!-- DRAG & DROP => On gérera le dragstart, dragover, drop, etc. en JS -->
     </ul>
     <button class="btn" id="finishSessionBtn" style="display:none;">Terminer la séance</button>
     <button class="btn" id="btnReturnProgram">Retour Programme</button>
@@ -380,7 +371,6 @@
 
   <!-- SECTION RÉCOMPENSE (FIN DE SÉANCE) & PROGRESSION -->
   <section id="rewards">
-    <!-- Carte de récompense -->
     <div class="rewards-box">
       <h2>Félicitations !</h2>
       <p>Tu as terminé ta séance avec succès.</p>
@@ -391,101 +381,121 @@
     </div>
 
     <!-- Carte de résumé Hebdomadaire -->
-    <div class="week-summary" id="weekSummaryCard">
+    <div class="week-summary">
       <h3>Résumé de la semaine</h3>
       <p>Visualise tes séances sur les 7 derniers jours.</p>
       <div class="week-days" id="weekDaysContainer">
         <!-- Cercles dynamiques injectés par JavaScript -->
       </div>
     </div>
+
+    <!-- Objectifs / Mini-défis -->
+    <div class="objectives-box">
+      <h3>Objectif hebdomadaire</h3>
+      <p>Tu as indiqué vouloir faire <span id="weekGoalEcho"></span> séance(s) cette semaine.</p>
+      <p id="objectiveStatus"></p>
+    </div>
+
+    <!-- Historique détaillé (ex. mensuel) -->
+    <div class="history-box">
+      <h3>Historique Mensuel</h3>
+      <p>Nombre de séances complétées par mois :</p>
+      <table id="monthlyHistoryTable" border="1" cellpadding="4" style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr><th>Mois</th><th>Nombre de séances</th></tr>
+        </thead>
+        <tbody id="monthlyHistoryBody">
+          <!-- Rempli en JS -->
+        </tbody>
+      </table>
+    </div>
   </section>
 
-  <!-- On charge la bibliothèque Confetti en dernier pour éviter tout conflit d'exécution -->
+  <!-- Confetti library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 
-  <!-- SCRIPT INLINE POUR LA NAVIGATION, LA LOGIQUE MVP, DRAG & DROP, DARK MODE -->
+  <!-- SCRIPT INLINE POUR LA NAVIGATION, LA LOGIQUE MVP, DRAG & DROP, ETC. -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // --- Initialisation du Confetti ---
+      // --- Confetti ---
       const confettiCanvas = document.getElementById('confetti-canvas');
-      // On crée une instance nommée "myConfetti" pour éviter tout conflit avec la fonction globale "confetti".
       const myConfetti = confetti.create(confettiCanvas, {
         resize: true,
         useWorker: true
       });
 
-      // --- DARK MODE ---
-      const toggleDarkModeBtn = document.getElementById('toggleDarkModeBtn');
-      toggleDarkModeBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        if (document.body.classList.contains('dark-mode')) {
-          toggleDarkModeBtn.textContent = "Mode Clair";
-        } else {
-          toggleDarkModeBtn.textContent = "Mode Sombre";
-        }
+      // TUTORIAL
+      const tutorialOverlay = document.getElementById('tutorialOverlay');
+      const closeTutorialBtn = document.getElementById('closeTutorialBtn');
+
+      // Au premier lancement, on affiche le tutoriel si pas de flag localStorage
+      if (!localStorage.getItem('hasSeenTutorial')) {
+        tutorialOverlay.classList.add('active');
+      }
+      closeTutorialBtn.addEventListener('click', () => {
+        tutorialOverlay.classList.remove('active');
+        localStorage.setItem('hasSeenTutorial', 'true');
       });
 
-      // --- Données de base du programme : on peut les stocker en local pour un MVP ---
+      // Données du programme
       const programData = {
         legs: {
           title: "Séance 1 : Jambes",
           exercises: [
-            { name: "Squats", sets: "4 séries de 8-12 répétitions" },
-            { name: "Fentes", sets: "3 séries de 10 répétitions par jambe" },
-            { name: "Presse à cuisses", sets: "3 séries de 10-12 répétitions" },
-            { name: "Soulevé de terre jambes tendues", sets: "3 séries de 12 répétitions" },
-            { name: "Mollets", sets: "4 séries de 15-20 répétitions" }
+            { name: "Squats", sets: "8-12 répétitions" },
+            { name: "Fentes", sets: "10 répétitions par jambe" },
+            { name: "Presse à cuisses", sets: "10-12 répétitions" },
+            { name: "Soulevé de terre jambes tendues", sets: "12 répétitions" },
+            { name: "Mollets", sets: "15-20 répétitions" }
           ]
         },
         backBiceps: {
           title: "Séance 2 : Dos & Biceps",
           exercises: [
-            { name: "Tractions (ou tirage poitrine)", sets: "4 séries de 8-12 répétitions" },
-            { name: "Rowing barre", sets: "4 séries de 10-12 répétitions" },
-            { name: "Tirage horizontal", sets: "3 séries de 12 répétitions" },
-            { name: "Curl biceps", sets: "3 séries de 10-12 répétitions" },
-            { name: "Curl marteau", sets: "3 séries de 12 répétitions" }
+            { name: "Tractions (ou tirage poitrine)", sets: "8-12 répétitions" },
+            { name: "Rowing barre", sets: "10-12 répétitions" },
+            { name: "Tirage horizontal", sets: "12 répétitions" },
+            { name: "Curl biceps", sets: "10-12 répétitions" },
+            { name: "Curl marteau", sets: "12 répétitions" }
           ]
         },
         shouldersTriceps: {
           title: "Séance 3 : Épaules & Triceps",
           exercises: [
-            { name: "Développé militaire", sets: "4 séries de 8-12 répétitions" },
-            { name: "Élévations latérales", sets: "3 séries de 12-15 répétitions" },
-            { name: "Oiseau (épaules arrière)", sets: "3 séries de 12-15 répétitions" },
-            { name: "Développé couché prise serrée", sets: "4 séries de 8-12 répétitions" },
-            { name: "Extension triceps", sets: "3 séries de 12 répétitions" }
+            { name: "Développé militaire", sets: "8-12 répétitions" },
+            { name: "Élévations latérales", sets: "12-15 répétitions" },
+            { name: "Oiseau (épaules arrière)", sets: "12-15 répétitions" },
+            { name: "Développé couché prise serrée", sets: "8-12 répétitions" },
+            { name: "Extension triceps", sets: "12 répétitions" }
           ]
         }
       };
 
-      // --- STATE pour suivi MVP ---
+      // State / localStorage
       let totalSessionsCompleted = parseInt(localStorage.getItem('totalSessionsCompleted') || '0');
       let currentStreak = parseInt(localStorage.getItem('currentStreak') || '0');
       let lastCompletionDate = localStorage.getItem('lastCompletionDate') || null;
       let completedDates = JSON.parse(localStorage.getItem('completedDates') || '[]');
 
-      // --- FONCTIONS DE NAVIGATION ---
+      // Historique mensuel [mois => nb séances]
+      let monthlyHistory = JSON.parse(localStorage.getItem('monthlyHistory') || '{}');
+
+      // Navigation
       function showSection(sectionId) {
-        // Masquer toutes les sections
         document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-        // Afficher la section ciblée
         document.getElementById(sectionId).classList.add('active');
 
-        // Gérer l'état des boutons de nav
         document.getElementById('navHome').classList.remove('active');
         document.getElementById('navProgram').classList.remove('active');
         document.getElementById('navProgress').classList.remove('active');
 
-        if (sectionId === 'home') {
-          document.getElementById('navHome').classList.add('active');
-        }
-        if (sectionId === 'program') {
-          document.getElementById('navProgram').classList.add('active');
-        }
+        if (sectionId === 'home') document.getElementById('navHome').classList.add('active');
+        if (sectionId === 'program') document.getElementById('navProgram').classList.add('active');
         if (sectionId === 'rewards') {
           document.getElementById('navProgress').classList.add('active');
           updateWeekSummary();
+          updateObjectives();
+          updateMonthlyHistoryView();
         }
       }
 
@@ -499,83 +509,119 @@
         showSection('rewards');
       }
 
-      // --- OUVRIR LES DÉTAILS D'UNE SÉANCE ---
+      // Objectif
+      const weeklyGoalInput = document.getElementById('weeklyGoal');
+      const weeklyGoalDisplay = document.getElementById('weeklyGoalDisplay');
+      weeklyGoalDisplay.textContent = weeklyGoalInput.value;
+      weeklyGoalInput.addEventListener('input', () => {
+        weeklyGoalDisplay.textContent = weeklyGoalInput.value;
+      });
+
+      // Événements barre nav
+      document.getElementById('navHome').addEventListener('click', goHome);
+      document.getElementById('navProgram').addEventListener('click', goProgram);
+      document.getElementById('navProgress').addEventListener('click', goRewards);
+
+      document.getElementById('btnReturnHome').addEventListener('click', goHome);
+      document.getElementById('btnReturnProgram').addEventListener('click', goProgram);
+      document.getElementById('btnToProgram').addEventListener('click', goProgram);
+      document.getElementById('btnToHome').addEventListener('click', goHome);
+
+      // Bouton start
+      document.getElementById('btnStart').addEventListener('click', goProgram);
+
+      // Nombre de séries choisi par l’utilisateur
+      const userSetsChoice = document.getElementById('userSetsChoice');
+
+      // Ouvrir détails d'une séance
       window.openSessionDetails = function(sessionKey) {
         const session = programData[sessionKey];
         if (!session) return;
 
-        // Mettre à jour le titre
-        document.getElementById('sessionTitle').textContent = session.title;
+        const sessionTitle = document.getElementById('sessionTitle');
+        sessionTitle.textContent = session.title;
 
-        // Nettoyer la liste d'exos
+        // Nettoyer la liste
         const exerciseList = document.getElementById('exerciseList');
         exerciseList.innerHTML = '';
 
-        // Peupler la liste AVEC DRAG & DROP
-        session.exercises.forEach((ex) => {
+        // Récupérer le nombre de séries
+        const setsCount = parseInt(userSetsChoice.value);
+
+        session.exercises.forEach(ex => {
           const li = document.createElement('li');
           li.className = 'exercise-item';
-          li.draggable = true; // Rendre la carte draggable
-          li.innerHTML = `
-            <div>
+          li.draggable = true;
+
+          // On propose un champ "poids" en option
+          const htmlLeft = `
+            <div class="exercise-left">
               <div class="exercise-name">${ex.name}</div>
               <div class="exercise-details">${ex.sets}</div>
+              <label style="display:block; margin-top:4px;">
+                Poids (optionnel):
+                <input type="number" style="width:80px" min="0" step="1" />
+              </label>
             </div>
-            <button class="done-btn" data-clicks="0">0</button>
           `;
 
-          // Ajout listener sur le bouton "series"
-          const btn = li.querySelector('.done-btn');
-          btn.addEventListener('click', () => handleExerciseClick(btn));
+          // Création d’une zone de progression
+          let circlesHTML = '';
+          for (let i=0; i<setsCount; i++){
+            circlesHTML += `<div class="circle"></div>`;
+          }
+          const progressHTML = `<div class="exercise-progress">${circlesHTML}</div>`;
 
-          // Gérer DRAG & DROP
+          li.innerHTML = htmlLeft + progressHTML;
+
+          // Drag & Drop
           li.addEventListener('dragstart', dragStart);
           li.addEventListener('dragover', dragOver);
+          li.addEventListener('dragleave', dragLeave);
           li.addEventListener('drop', dropItem);
           li.addEventListener('dragend', dragEnd);
-          
+
+          // Gérer clics (simple / double) sur les cercles pour valider séries
+          const circleEls = li.querySelectorAll('.circle');
+          circleEls.forEach((circle, index) => {
+            // Au clic : on remplit le cercle suivant
+            circle.addEventListener('click', () => fillNextCircle(circleEls, index));
+            // Au double-clic (plus rapide)
+            circle.addEventListener('dblclick', () => fillNextCircle(circleEls, index));
+          });
+
           exerciseList.appendChild(li);
         });
 
-        // Remettre le bouton "Terminer la séance" à l'état initial (caché)
         document.getElementById('finishSessionBtn').style.display = 'none';
         showSection('session-details');
       };
 
-      // --- LOGIQUE DE CLIQUAGE SUR LE BOUTON D'UN EXERCICE (4 séries) ---
-      function handleExerciseClick(btn) {
-        let currentClicks = parseInt(btn.getAttribute('data-clicks'));
-        currentClicks++;
-
-        if (currentClicks < 4) {
-          // Mettre à jour le texte + attribut
-          btn.textContent = currentClicks.toString();
-          btn.setAttribute('data-clicks', currentClicks);
-        } else {
-          // 4ᵉ clic => Fait, exercise "done"
-          btn.textContent = "Fait";
-          btn.disabled = true;
-          btn.parentElement.classList.add('done');
-
-          btn.setAttribute('data-clicks', "4");
-
-          // Lancer la confetti
-          myConfetti({
-            particleCount: 30,
-            spread: 60,
-            origin: { y: 0.6 }
-          });
+      // Fonction pour remplir un cercle (et ceux avant lui) => valider la série
+      function fillNextCircle(circleEls, indexClicked){
+        // On remplit le cercle cliqué + tous ceux avant si besoin
+        for (let i=0; i<= indexClicked; i++){
+          circleEls[i].classList.add('filled');
         }
-
         checkAllExercisesDone();
       }
 
-      // --- CHECK SI TOUS LES EXERCICES SONT FAITS ---
+      // Vérifier si tous les exercices sont faits
       function checkAllExercisesDone() {
+        const setsCount = parseInt(userSetsChoice.value);
         const allExercises = document.querySelectorAll('#exerciseList .exercise-item');
-        const allDone = [...allExercises].every(item => {
-          const b = item.querySelector('.done-btn');
-          return (b.getAttribute('data-clicks') === "4");
+        let allDone = true;
+
+        allExercises.forEach(item => {
+          const circles = item.querySelectorAll('.circle');
+          // Condition => toutes les circles “filled”
+          const filledCount = [...circles].filter(c => c.classList.contains('filled')).length;
+          if (filledCount < setsCount){
+            allDone = false;
+          } else {
+            // colorer l’item pour dire “done”
+            item.classList.add('done');
+          }
         });
 
         if (allDone) {
@@ -583,14 +629,14 @@
         }
       }
 
-      // --- FIN DE SÉANCE ---
+      // FIN DE SEANCE
       document.getElementById('finishSessionBtn').addEventListener('click', () => {
         totalSessionsCompleted++;
         localStorage.setItem('totalSessionsCompleted', totalSessionsCompleted);
 
         const today = new Date().toLocaleDateString('fr-CA');
         if (lastCompletionDate === today) {
-          // déjà fait aujourd'hui
+          // déjà fait
         } else {
           if (lastCompletionDate) {
             const diff = new Date(today) - new Date(lastCompletionDate);
@@ -607,10 +653,19 @@
         localStorage.setItem('lastCompletionDate', today);
         lastCompletionDate = today;
 
+        // Ajout dans completedDates
         if (!completedDates.includes(today)) {
           completedDates.push(today);
           localStorage.setItem('completedDates', JSON.stringify(completedDates));
         }
+
+        // Mise à jour historique mensuel
+        const thisMonth = (new Date()).toISOString().slice(0,7); // ex “2024-01”
+        if (!monthlyHistory[thisMonth]) {
+          monthlyHistory[thisMonth] = 0;
+        }
+        monthlyHistory[thisMonth]++;
+        localStorage.setItem('monthlyHistory', JSON.stringify(monthlyHistory));
 
         document.getElementById('rewardPoints').textContent = 
           `Tu as complété ${totalSessionsCompleted} séance(s) au total !`;
@@ -622,21 +677,18 @@
           spread: 70,
           origin: { y: 0.6 }
         });
-
-        showSection('rewards');
+        goRewards();
       });
 
-      // --- AFFICHER RÉSUMÉ HEBDO ---
+      // Semaine
       function updateWeekSummary() {
         const container = document.getElementById('weekDaysContainer');
         container.innerHTML = '';
-
         const now = new Date();
         for (let i = 6; i >= 0; i--) {
-          let checkDate = new Date(now);
+          const checkDate = new Date(now);
           checkDate.setDate(checkDate.getDate() - i);
           const dayStr = checkDate.toISOString().split('T')[0];
-
           const options = { weekday: 'short' };
           const dayLabel = checkDate.toLocaleDateString('fr-FR', options);
 
@@ -645,63 +697,92 @@
           if (completedDates.includes(dayStr)) {
             dayDiv.classList.add('done');
           }
-          dayDiv.innerHTML = `<span class="day-label">${dayLabel}</span>`;
-
+          dayDiv.textContent = dayLabel;
           container.appendChild(dayDiv);
         }
       }
 
-      // --- DRAG & DROP LOGIC ---
-      let draggedItem = null;
+      // Objectifs
+      function updateObjectives(){
+        const weekGoalEcho = document.getElementById('weekGoalEcho');
+        weekGoalEcho.textContent = weeklyGoalInput.value;
+        const objectiveStatus = document.getElementById('objectiveStatus');
 
+        // Nombre de séances faites sur les 7 derniers jours
+        const now = new Date();
+        let countThisWeek = 0;
+        for (let i=0; i<7; i++){
+          const check = new Date(now);
+          check.setDate(check.getDate() - i);
+          const ds = check.toISOString().split('T')[0];
+          if (completedDates.includes(ds)) {
+            countThisWeek++;
+          }
+        }
+
+        if (countThisWeek >= weeklyGoalInput.value) {
+          objectiveStatus.textContent = "Bravo ! Objectif atteint cette semaine ! Nouveau badge débloqué !";
+        } else {
+          objectiveStatus.textContent = `Tu as fait ${countThisWeek} séance(s) cette semaine. Encore ${(weeklyGoalInput.value - countThisWeek)} pour atteindre ton objectif !`;
+        }
+      }
+
+      // Historique mensuel
+      function updateMonthlyHistoryView(){
+        const tbody = document.getElementById('monthlyHistoryBody');
+        tbody.innerHTML = '';
+        // monthlyHistory => { "2024-01": 5, "2024-02": 2, ... }
+        const sortedKeys = Object.keys(monthlyHistory).sort();
+        sortedKeys.forEach(key => {
+          const tr = document.createElement('tr');
+          const tdMonth = document.createElement('td');
+          const tdCount = document.createElement('td');
+          tdMonth.textContent = key; 
+          tdCount.textContent = monthlyHistory[key];
+          tr.appendChild(tdMonth);
+          tr.appendChild(tdCount);
+          tbody.appendChild(tr);
+        });
+      }
+
+      // DRAG & DROP
+      let draggedItem = null;
       function dragStart(e) {
         draggedItem = this;
+        this.classList.add('dragged');
         e.dataTransfer.effectAllowed = "move";
       }
       function dragOver(e) {
-        e.preventDefault(); // important pour autoriser le drop
+        e.preventDefault();
         this.classList.add('drag-over');
+      }
+      function dragLeave(e) {
+        this.classList.remove('drag-over');
       }
       function dropItem(e) {
         e.preventDefault();
         this.classList.remove('drag-over');
-
         if (draggedItem !== this) {
           const exerciseList = document.getElementById('exerciseList');
-          // Positionner draggedItem avant (ou après) this
           const items = [...exerciseList.children];
           const draggedIndex = items.indexOf(draggedItem);
           const droppedIndex = items.indexOf(this);
 
           if (draggedIndex < droppedIndex) {
-            // On le place après
             exerciseList.insertBefore(draggedItem, this.nextSibling);
           } else {
-            // On le place avant
             exerciseList.insertBefore(draggedItem, this);
           }
         }
       }
-      function dragEnd() {
+      function dragEnd(e) {
+        this.classList.remove('dragged');
         document.querySelectorAll('.exercise-item').forEach(item => {
           item.classList.remove('drag-over');
         });
         draggedItem = null;
       }
 
-      // --- Écouteurs de navigation ---
-      document.getElementById('navHome').addEventListener('click', goHome);
-      document.getElementById('navProgram').addEventListener('click', goProgram);
-      document.getElementById('navProgress').addEventListener('click', goRewards);
-
-      document.getElementById('btnReturnHome').addEventListener('click', goHome);
-      document.getElementById('btnReturnProgram').addEventListener('click', goProgram);
-      document.getElementById('btnToProgram').addEventListener('click', goProgram);
-      document.getElementById('btnToHome').addEventListener('click', goHome);
-
-      document.getElementById('btnStart').addEventListener('click', goProgram);
-
-      // Par défaut, on affiche déjà la Home
     });
   </script>
 </body>
