@@ -15,11 +15,19 @@
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
     }
 
+    /* Mode clair (par défaut) */
     body {
       background-color: #f7f7f7;
       color: #333;
       line-height: 1.4;
       font-size: 16px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Mode sombre */
+    body.dark-mode {
+      background-color: #121212;
+      color: #e0e0e0;
     }
 
     header,
@@ -37,18 +45,34 @@
       display: flex;
       justify-content: space-around;
       margin-bottom: 1em;
+      align-items: center;
     }
     .nav-bar button {
       background: none;
       border: none;
       font-size: 1rem;
-      color: #555;
+      color: inherit;
       padding: 0.5em 1em;
       cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .nav-bar button:hover {
+      opacity: 0.7;
     }
     .nav-bar button.active {
       font-weight: bold;
-      color: #3B82F6; /* Couleur d'accent */
+      color: #3B82F6; /* Couleur d'accent en mode clair */
+    }
+    body.dark-mode .nav-bar button.active {
+      color: #7C3AED; /* Couleur d'accent si on veut la changer en mode sombre, par ex. */
+    }
+
+    /* Bouton Dark Mode */
+    #toggleDarkModeBtn {
+      font-size: 0.9rem;
+      border: 1px solid;
+      border-radius: 4px;
+      padding: 0.3em 0.6em;
     }
 
     /* TITRES ET SECTIONS */
@@ -58,6 +82,10 @@
     h1 {
       font-size: 1.6rem;
       color: #3B82F6; /* Couleur d'accent principale */
+      transition: color 0.3s;
+    }
+    body.dark-mode h1 {
+      color: #7C3AED; /* Couleur d'accent en mode sombre */
     }
     h2 {
       font-size: 1.2rem;
@@ -80,10 +108,15 @@
       cursor: pointer;
       margin: 1em 0;
       font-weight: 500;
-      transition: transform 0.2s;
+      transition: transform 0.2s, opacity 0.2s;
     }
     .btn:hover {
       transform: scale(0.98);
+    }
+
+    /* En mode sombre, on change éventuellement le gradient si on veut */
+    body.dark-mode .btn {
+      background: linear-gradient(45deg, #6d28d9, #3b82f6);
     }
 
     /* STRUCTURE DES SECTIONS (HIDDEN/ACTIVE) */
@@ -113,6 +146,17 @@
     .program-card:hover {
       background: #f0f4ff;
     }
+    body.dark-mode .program-card {
+      background: #1f1f1f;
+      box-shadow: none;
+    }
+    .program-card:hover {
+      background: #f0f4ff;
+    }
+    body.dark-mode .program-card:hover {
+      background: #2f2f2f;
+    }
+
     .program-title {
       font-weight: bold;
       margin-bottom: 0.5em;
@@ -121,8 +165,11 @@
       font-size: 0.9rem;
       color: #555;
     }
+    body.dark-mode .program-exercises {
+      color: #bbb;
+    }
 
-    /* LISTE D'EXERCICES DÉTAILLÉS */
+    /* LISTE D'EXERCICES DÉTAILLÉS (DRAG & DROP) */
     .exercise-list {
       list-style: none;
       margin: 1em 0;
@@ -142,6 +189,18 @@
     .exercise-item.done {
       background-color: #e4fce3;
     }
+    body.dark-mode .exercise-item {
+      background: #1f1f1f;
+    }
+    body.dark-mode .exercise-item.done {
+      background-color: #226633; /* Un vert sombre */
+    }
+
+    .exercise-item.drag-over {
+      outline: 2px dashed #3B82F6;
+      outline-offset: -4px;
+    }
+
     .exercise-name {
       font-weight: 500;
     }
@@ -149,6 +208,9 @@
       font-size: 0.85rem;
       color: #777;
       margin-top: 0.3em;
+    }
+    body.dark-mode .exercise-details {
+      color: #999;
     }
 
     /* BOUTON “DONE” */
@@ -175,11 +237,19 @@
       box-shadow: 0 0 4px rgba(0,0,0,0.1);
       margin-bottom: 1em;
     }
+    body.dark-mode .rewards-box {
+      background: #1f1f1f;
+      box-shadow: none;
+    }
+
     .reward-message {
       font-size: 1rem;
       margin-top: 1em;
       color: #3B82F6;
       font-weight: bold;
+    }
+    body.dark-mode .reward-message {
+      color: #7C3AED;
     }
 
     /* Carte de résumé hebdo */
@@ -191,11 +261,19 @@
       margin-bottom: 1em;
       text-align: center;
     }
+    body.dark-mode .week-summary {
+      background-color: #1f1f1f;
+      box-shadow: none;
+    }
     .week-summary h3 {
       margin-bottom: 0.5em;
       color: #3B82F6;
       font-size: 1rem;
     }
+    body.dark-mode .week-summary h3 {
+      color: #7C3AED;
+    }
+
     .week-days {
       display: flex;
       justify-content: space-between;
@@ -212,13 +290,18 @@
       flex-direction: column;
       font-size: 0.75rem;
       color: #333;
+      transition: background-color 0.3s;
     }
     .day-circle.done {
       background-color: #34D399; /* vert si séance effectuée */
       color: #fff;
     }
-    .day-label {
-      font-weight: bold;
+    body.dark-mode .day-circle {
+      background-color: #333;
+      color: #e0e0e0;
+    }
+    body.dark-mode .day-circle.done {
+      background-color: #3fbf8b; /* Un vert un peu plus “sombre” */
     }
 
     /* CONFETTI CANVAS */
@@ -240,9 +323,12 @@
 
   <!-- BARRE DE NAVIGATION SIMPLIFIÉE -->
   <nav class="nav-bar">
-    <button id="navHome" class="active">Accueil</button>
-    <button id="navProgram">Programme</button>
-    <button id="navProgress">Progression</button>
+    <div>
+      <button id="navHome" class="active">Accueil</button>
+      <button id="navProgram">Programme</button>
+      <button id="navProgress">Progression</button>
+    </div>
+    <button id="toggleDarkModeBtn">Mode Sombre</button>
   </nav>
 
   <!-- SECTION ACCUEIL -->
@@ -286,6 +372,7 @@
     <h2 id="sessionTitle">Détails de la Séance</h2>
     <ul class="exercise-list" id="exerciseList">
       <!-- Les exercices seront injectés dynamiquement via JavaScript -->
+      <!-- DRAG & DROP => On gérera le dragstart, dragover, drop, etc. en JS -->
     </ul>
     <button class="btn" id="finishSessionBtn" style="display:none;">Terminer la séance</button>
     <button class="btn" id="btnReturnProgram">Retour Programme</button>
@@ -316,7 +403,7 @@
   <!-- On charge la bibliothèque Confetti en dernier pour éviter tout conflit d'exécution -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
 
-  <!-- SCRIPT INLINE POUR LA NAVIGATION ET LA LOGIQUE MVP -->
+  <!-- SCRIPT INLINE POUR LA NAVIGATION, LA LOGIQUE MVP, DRAG & DROP, DARK MODE -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // --- Initialisation du Confetti ---
@@ -325,6 +412,17 @@
       const myConfetti = confetti.create(confettiCanvas, {
         resize: true,
         useWorker: true
+      });
+
+      // --- DARK MODE ---
+      const toggleDarkModeBtn = document.getElementById('toggleDarkModeBtn');
+      toggleDarkModeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        if (document.body.classList.contains('dark-mode')) {
+          toggleDarkModeBtn.textContent = "Mode Clair";
+        } else {
+          toggleDarkModeBtn.textContent = "Mode Sombre";
+        }
       });
 
       // --- Données de base du programme : on peut les stocker en local pour un MVP ---
@@ -362,13 +460,9 @@
       };
 
       // --- STATE pour suivi MVP ---
-      // On utilise localStorage pour simuler la persistance.
       let totalSessionsCompleted = parseInt(localStorage.getItem('totalSessionsCompleted') || '0');
       let currentStreak = parseInt(localStorage.getItem('currentStreak') || '0');
       let lastCompletionDate = localStorage.getItem('lastCompletionDate') || null;
-
-      // On va aussi stocker un tableau de dates sur lesquelles l’utilisateur a fini une séance.
-      // (Format "YYYY-MM-DD").  
       let completedDates = JSON.parse(localStorage.getItem('completedDates') || '[]');
 
       // --- FONCTIONS DE NAVIGATION ---
@@ -391,7 +485,6 @@
         }
         if (sectionId === 'rewards') {
           document.getElementById('navProgress').classList.add('active');
-          // Chaque fois qu’on arrive sur la page "rewards", on met à jour le récapitulatif hebdo
           updateWeekSummary();
         }
       }
@@ -418,12 +511,11 @@
         const exerciseList = document.getElementById('exerciseList');
         exerciseList.innerHTML = '';
 
-        // Peupler la liste
+        // Peupler la liste AVEC DRAG & DROP
         session.exercises.forEach((ex) => {
           const li = document.createElement('li');
           li.className = 'exercise-item';
-
-          // data-clicks = 0 par défaut
+          li.draggable = true; // Rendre la carte draggable
           li.innerHTML = `
             <div>
               <div class="exercise-name">${ex.name}</div>
@@ -431,9 +523,17 @@
             </div>
             <button class="done-btn" data-clicks="0">0</button>
           `;
-          // Ajout listener sur le bouton
+
+          // Ajout listener sur le bouton "series"
           const btn = li.querySelector('.done-btn');
           btn.addEventListener('click', () => handleExerciseClick(btn));
+
+          // Gérer DRAG & DROP
+          li.addEventListener('dragstart', dragStart);
+          li.addEventListener('dragover', dragOver);
+          li.addEventListener('drop', dropItem);
+          li.addEventListener('dragend', dragEnd);
+          
           exerciseList.appendChild(li);
         });
 
@@ -457,7 +557,6 @@
           btn.disabled = true;
           btn.parentElement.classList.add('done');
 
-          // On bloque l'attribut sur 4
           btn.setAttribute('data-clicks', "4");
 
           // Lancer la confetti
@@ -471,35 +570,30 @@
         checkAllExercisesDone();
       }
 
-      // --- CHECK SI TOUS LES EXERCICES SONT FAITS (4 clics sur chaque) ---
+      // --- CHECK SI TOUS LES EXERCICES SONT FAITS ---
       function checkAllExercisesDone() {
         const allExercises = document.querySelectorAll('#exerciseList .exercise-item');
-        // un exercice est "terminé" si data-clicks == "4"
         const allDone = [...allExercises].every(item => {
           const b = item.querySelector('.done-btn');
           return (b.getAttribute('data-clicks') === "4");
         });
 
         if (allDone) {
-          // Afficher le bouton "Terminer la séance"
           document.getElementById('finishSessionBtn').style.display = 'block';
         }
       }
 
-      // --- FIN DE SÉANCE : CALCUL DES RÉCOMPENSES, AFFICHAGE ---
+      // --- FIN DE SÉANCE ---
       document.getElementById('finishSessionBtn').addEventListener('click', () => {
-        // Incrémenter le nombre de séances terminées
         totalSessionsCompleted++;
         localStorage.setItem('totalSessionsCompleted', totalSessionsCompleted);
 
-        // Gestion du streak
-        const today = new Date().toLocaleDateString('fr-CA'); // Format YYYY-MM-DD
+        const today = new Date().toLocaleDateString('fr-CA');
         if (lastCompletionDate === today) {
-          // La séance a déjà été faite aujourd'hui
+          // déjà fait aujourd'hui
         } else {
           if (lastCompletionDate) {
             const diff = new Date(today) - new Date(lastCompletionDate);
-            // 86400000 ms = 1 jour
             if (diff === 86400000) {
               currentStreak++;
             } else {
@@ -513,26 +607,22 @@
         localStorage.setItem('lastCompletionDate', today);
         lastCompletionDate = today;
 
-        // Ajouter cette date dans completedDates si elle n’y est pas déjà
         if (!completedDates.includes(today)) {
           completedDates.push(today);
           localStorage.setItem('completedDates', JSON.stringify(completedDates));
         }
 
-        // Mettre à jour l’affichage des récompenses
         document.getElementById('rewardPoints').textContent = 
           `Tu as complété ${totalSessionsCompleted} séance(s) au total !`;
         document.getElementById('streakMessage').textContent =
           `Streak actuel : ${currentStreak} jour(s) consécutif(s) !`;
 
-        // Lancer une grande animation de confetti
         myConfetti({
           particleCount: 100,
           spread: 70,
           origin: { y: 0.6 }
         });
 
-        // Basculer sur la section des récompenses
         showSection('rewards');
       });
 
@@ -541,36 +631,62 @@
         const container = document.getElementById('weekDaysContainer');
         container.innerHTML = '';
 
-        // On veut les 7 derniers jours (aujourd'hui inclus).
-        // Calculer la date du jour, puis reculer de 6 jours.
         const now = new Date();
         for (let i = 6; i >= 0; i--) {
           let checkDate = new Date(now);
           checkDate.setDate(checkDate.getDate() - i);
-
-          // Format "YYYY-MM-DD"
           const dayStr = checkDate.toISOString().split('T')[0];
 
-          // Nom du jour (lun, mar, mer…)
           const options = { weekday: 'short' };
           const dayLabel = checkDate.toLocaleDateString('fr-FR', options);
 
-          // Créer l’élément
           const dayDiv = document.createElement('div');
           dayDiv.className = 'day-circle';
-
-          // Si completedDates contient dayStr => c’est “done”
           if (completedDates.includes(dayStr)) {
             dayDiv.classList.add('done');
           }
-
-          // Contenu du cercle : Jour + label
-          dayDiv.innerHTML = `
-            <span class="day-label">${dayLabel}</span>
-          `;
+          dayDiv.innerHTML = `<span class="day-label">${dayLabel}</span>`;
 
           container.appendChild(dayDiv);
         }
+      }
+
+      // --- DRAG & DROP LOGIC ---
+      let draggedItem = null;
+
+      function dragStart(e) {
+        draggedItem = this;
+        e.dataTransfer.effectAllowed = "move";
+      }
+      function dragOver(e) {
+        e.preventDefault(); // important pour autoriser le drop
+        this.classList.add('drag-over');
+      }
+      function dropItem(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+
+        if (draggedItem !== this) {
+          const exerciseList = document.getElementById('exerciseList');
+          // Positionner draggedItem avant (ou après) this
+          const items = [...exerciseList.children];
+          const draggedIndex = items.indexOf(draggedItem);
+          const droppedIndex = items.indexOf(this);
+
+          if (draggedIndex < droppedIndex) {
+            // On le place après
+            exerciseList.insertBefore(draggedItem, this.nextSibling);
+          } else {
+            // On le place avant
+            exerciseList.insertBefore(draggedItem, this);
+          }
+        }
+      }
+      function dragEnd() {
+        document.querySelectorAll('.exercise-item').forEach(item => {
+          item.classList.remove('drag-over');
+        });
+        draggedItem = null;
       }
 
       // --- Écouteurs de navigation ---
@@ -578,19 +694,14 @@
       document.getElementById('navProgram').addEventListener('click', goProgram);
       document.getElementById('navProgress').addEventListener('click', goRewards);
 
-      // Bouton Retour Accueil
       document.getElementById('btnReturnHome').addEventListener('click', goHome);
-      // Bouton Retour Programme depuis la séance
       document.getElementById('btnReturnProgram').addEventListener('click', goProgram);
-      // Bouton du bas pour Voir le programme (dans rewards)
       document.getElementById('btnToProgram').addEventListener('click', goProgram);
-      // Bouton du bas pour Accueil (dans rewards)
       document.getElementById('btnToHome').addEventListener('click', goHome);
 
-      // --- BOUTON DÉMARRAGE SÉANCE (Accueil) ---
       document.getElementById('btnStart').addEventListener('click', goProgram);
 
-      // La Home est déjà affichée par défaut
+      // Par défaut, on affiche déjà la Home
     });
   </script>
 </body>
