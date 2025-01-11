@@ -1,107 +1,670 @@
-00);
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Mon Coach Virtuel</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        /* Palette de couleurs inspirée des dégradés et du bien-être */
+        :root {
+            --primary-color: #5865F2; /* Discord Blurple, moderne et dynamique */
+            --secondary-color: #43B581; /* Vert vibrant, santé et progrès */
+            --accent-color: #FEE75C;   /* Jaune solaire, énergie et motivation */
+            --background-color: #F4F6FA; /* Gris clair, propre et aéré */
+            --card-background: #FFFFFF; /* Blanc, contraste et clarté */
+            --text-color-primary: #36393F; /* Gris foncé, lisibilité */
+            --text-color-secondary: #72767D; /* Gris moyen, discrétion */
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
-        // Configuration du temps de repos
-        document.getElementById('restDuration').addEventListener('change', function() {
-            restDurationValue = parseInt(this.value);
-            restTimerDisplay.textContent = restDurationValue;
-        });
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            -webkit-overflow-scrolling: touch; /* Pour une expérience fluide sur iOS */
+        }
 
-        // Gestion de la navigation entre les écrans
-        document.querySelectorAll('.navigation-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('.navigation-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
+        /* Styles pour l'en-tête */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-                const targetId = this.dataset.target;
-                document.querySelectorAll('section').forEach(section => {
-                    section.classList.add('hidden');
-                    section.classList.remove('active');
-                });
-                document.getElementById(targetId).classList.remove('hidden');
-                document.getElementById(targetId).classList.add('active');
+        header h1 {
+            margin: 0;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
 
-                // Démarrer le chronomètre quand on est sur l'écran du programme
-                if (targetId === 'programme-screen') {
-                    startChronometer();
-                } else {
-                    stopChronometer();
-                }
-            });
-        });
+        /* Conteneur principal */
+        main {
+            width: 90%;
+            max-width: 600px; /* Largeur maximale pour simuler l'écran d'un iPhone 12 */
+            padding: 20px;
+            margin-top: 20px;
+            flex-grow: 1;
+        }
 
-        // Animation de confettis
-        function showConfetti() {
-            const confettiWrapper = document.getElementById('confetti-wrapper');
-            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff', '#f0f'];
-            const count = 200;
+        /* Styles pour les cartes de session */
+        .session-card {
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s ease-in-out;
+        }
 
-            for (let i = 0; i < count; i++) {
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.left = `${Math.random() * 100}%`;
-                confetti.style.top = `${Math.random() * 100}%`;
+        .session-card:hover {
+            transform: scale(1.02);
+        }
 
-                const size = Math.random() * 10 + 5;
-                confetti.style.width = `${size}px`;
-                confetti.style.height = `${size}px`;
+        .session-card h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
 
-                const animationDuration = Math.random() * 2 + 1;
-                confetti.style.animation = `confetti-fall ${animationDuration}s ease-out forwards`;
+        .exercise-group {
+            margin-bottom: 15px;
+        }
 
-                confettiWrapper.appendChild(confetti);
+        .exercise-group h3 {
+            color: var(--text-color-secondary);
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            font-weight: 400;
+        }
 
-                confetti.addEventListener('animationend', () => {
-                    confetti.remove();
-                });
+        .exercise {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .exercise:last-child {
+            border-bottom: none;
+        }
+
+        .exercise-name {
+            font-weight: 500;
+        }
+
+        .set-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .set-button {
+            background-color: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+
+        .set-button.completed {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .set-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(var(--secondary-color-rgb), 0.3);
+        }
+
+        /* Bouton d'ajout de série */
+        .add-set-button {
+            background-color: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+
+        .add-set-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.3);
+        }
+
+        /* Minuteur de repos */
+        .rest-timer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        /* Animations subtiles pour la motivation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .set-button.completed {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        /* Styles spécifiques pour l'iPhone 12 */
+        @media (max-width: 400px) {
+            .session-card {
+                padding: 15px;
+            }
+            .set-controls {
+                gap: 5px;
+            }
+            .set-button {
+                width: 25px;
+                height: 25px;
+                font-size: 0.7rem;
+            }
+            .add-set-button {
+                width: 25px;
+                height: 25px;
+                font-size: 0.9rem;
             }
         }
 
-        // Animation d'arrivée des cartes au chargement
-        document.addEventListener('DOMContentLoaded', () => {
-            const sessionCards = document.querySelectorAll('.session-card');
-            sessionCards.forEach((card, index) => {
-                gsap.fromTo(card, {
-                    opacity: 0,
-                    y: 50,
-                }, {
-                    opacity: 1,
-                    y: 0,
-                    delay: index * 0.2,
-                    duration: 0.6,
-                    ease: 'power2.out',
-                    onComplete: () => {
-                        if (index === 0) {
-                            toggleCard(card.querySelector('h2')); // Déplier la première carte par défaut
-                        }
+        /* Barre de progression visuelle (inspirée des jeux) */
+        .progress-bar-container {
+            background-color: #eee;
+            border-radius: 10px;
+            height: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background-color: var(--accent-color);
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        /* Messages de feedback motivants (peuvent être étendus) */
+        .feedback-message {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            color: var(--text-color-secondary);
+        }
+
+        /* Bouton flottant pour l'action principale (peut être utilisé pour démarrer une session) */
+        .floating-action-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--box-shadow);
+            transition: background-color 0.3s ease;
+        }
+
+        .floating-action-button:hover {
+            background-color: #4c56ab;
+        }
+        .floating-action-button:focus {
+            outline: none;
+        }
+
+        /* Indicateurs de progression pour chaque séance */
+        .session-progress {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            color: var(--text-color-secondary);
+        }
+
+        .session-progress span {
+            margin-left: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mon Coach Virtuel</h1>
+    </header>
+
+    <main>
+        <div class="session-card" id="jour1">
+            <h2>Jour 1: Poitrine & Triceps</h2>
+            <div class="exercise-group">
+                <h3>Poitrine</h3>
+                <div class="exercise">
+                    <span class="exercise-name">Développé couché</span>
+                    <div class="set-controls" data-exercise="developpe-couche">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Écartés avec haltères</span>
+                    <div class="set-controls" data-exercise="ecartes-halteres">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Pompes</span>
+                    <div class="set-controls" data-exercise="pompes">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="exercise-group">
+                <h3>Triceps</h3>
+                <div class="exercise">
+                    <span class="exercise-name">Dips sur banc</span>
+                    <div class="set-controls" data-exercise="dips-banc">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Extension triceps à la poulie</span>
+                    <div class="set-controls" data-exercise="extension-triceps">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="session-progress">Progression: <span id="progress-jour1">0%</span></div>
+        </div>
+
+        <div class="session-card" id="jour2">
+            <h2>Jour 2: Dos & Biceps</h2>
+            <div class="exercise-group">
+                <h3>Dos</h3>
+                <div class="exercise">
+                    <span class="exercise-name">Tirage vertical</span>
+                    <div class="set-controls" data-exercise="tirage-vertical">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Rowing barre ou haltères</span>
+                    <div class="set-controls" data-exercise="rowing">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Tirage poulie basse</span>
+                    <div class="set-controls" data-exercise="tirage-poulie-basse">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="exercise-group">
+                <h3>Biceps</h3>
+                <div class="exercise">
+                    <span class="exercise-name">Curl biceps barre ou haltères</span>
+                    <div class="set-controls" data-exercise="curl-biceps">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Curl marteau</span>
+                    <div class="set-controls" data-exercise="curl-marteau">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="session-progress">Progression: <span id="progress-jour2">0%</span></div>
+        </div>
+
+        <div class="session-card" id="jour3">
+            <h2>Jour 3: Jambes & Fessiers</h2>
+            <div class="exercise-group">
+                <h3>Jambes & Fessiers</h3>
+                <div class="exercise">
+                    <span class="exercise-name">Squats</span>
+                    <div class="set-controls" data-exercise="squats">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Fentes marchées</span>
+                    <div class="set-controls" data-exercise="fentes-marchees">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Presse à cuisses</span>
+                    <div class="set-controls" data-exercise="presse-cuisses">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Leg Curl</span>
+                    <div class="set-controls" data-exercise="leg-curl">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Hip Thrust ou Ponts fessiers</span>
+                    <div class="set-controls" data-exercise="hip-thrust">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="session-progress">Progression: <span id="progress-jour3">0%</span></div>
+        </div>
+
+        <div class="session-card" id="jour4">
+            <h2>Jour 4: Épaules & Abdos</h2>
+            <div class="exercise-group">
+                <h3>Épaules</h3>
+                <div class="exercise">
+                    <span class="exercise-name">Développé militaire</span>
+                    <div class="set-controls" data-exercise="developpe-militaire">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Élévations latérales</span>
+                    <div class="set-controls" data-exercise="elevations-laterales">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Élévations frontales</span>
+                    <div class="set-controls" data-exercise="elevations-frontales">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Oiseau inversé</span>
+                    <div class="set-controls" data-exercise="oiseau-inverse">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="exercise-group">
+                <h3>Abdos</h3>
+                <div class="exercise">
+                    <span class="exercise-name">Planche</span>
+                    <div class="set-controls" data-exercise="planche">
+                        <button class="set-button timer-button" data-set="1">1</button>
+                        <button class="set-button timer-button" data-set="2">2</button>
+                        <button class="set-button timer-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Crunchs ou relevés de buste</span>
+                    <div class="set-controls" data-exercise="crunchs">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="session-progress">Progression: <span id="progress-jour4">0%</span></div>
+        </div>
+
+        <div class="session-card" id="jour5">
+            <h2>Jour 5: Session « Rappel » ou Circuit Full Body</h2>
+            <p>Choisissez votre option pour cette session.</p>
+            <h3>Option Circuit Full Body</h3>
+            <div class="exercise-group">
+                <div class="exercise">
+                    <span class="exercise-name">Burpees ou Mountain Climbers</span>
+                    <div class="set-controls" data-exercise="burpees">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Kettlebell Swings</span>
+                    <div class="set-controls" data-exercise="kettlebell-swings">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Pompes ou Dips sur banc</span>
+                    <div class="set-controls" data-exercise="pompes-circuit">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Squats sautés</span>
+                    <div class="set-controls" data-exercise="squats-sautes">
+                        <button class="set-button" data-set="1">1</button>
+                        <button class="set-button" data-set="2">2</button>
+                        <button class="set-button" data-set="3">3</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+                <div class="exercise">
+                    <span class="exercise-name">Planche latérale</span>
+                    <div class="set-controls" data-exercise="planche-laterale">
+                        <button class="set-button timer-button" data-set="1">G</button>
+                        <button class="set-button timer-button" data-set="1">D</button>
+                        <button class="set-button timer-button" data-set="2">G</button>
+                        <button class="set-button timer-button" data-set="2">D</button>
+                        <button class="add-set-button">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="session-progress">Progression: <span id="progress-jour5">0%</span></div>
+        </div>
+
+        <div class="rest-timer" id="restTimer" style="display: none;">Repos: <span id="timer"></span></div>
+        <div class="feedback-message" id="feedback"></div>
+    </main>
+
+    <script>
+        const setControls = document.querySelectorAll('.set-controls');
+        const restTimerDiv = document.getElementById('restTimer');
+        const timerSpan = document.getElementById('timer');
+        const feedbackDiv = document.getElementById('feedback');
+        let restInterval;
+        const restDuration = 60; // Durée du repos en secondes
+
+        function updateSessionProgress(sessionId) {
+            const sessionCard = document.getElementById(sessionId);
+            const totalSets = sessionCard.querySelectorAll('.set-button').length;
+            const completedSets = sessionCard.querySelectorAll('.set-button.completed').length;
+            const progressPercent = Math.round((completedSets / totalSets) * 100);
+            document.getElementById(`progress-${sessionId}`).textContent = `${progressPercent}%`;
+        }
+
+        setControls.forEach(controls => {
+            const exerciseName = controls.dataset.exercise;
+            const addButton = controls.querySelector('.add-set-button');
+            let addedSetCount = 4; // Commence à 4 car 3 sets sont déjà affichés
+
+            controls.addEventListener('click', (event) => {
+                const targetButton = event.target;
+
+                if (targetButton.classList.contains('set-button')) {
+                    targetButton.classList.toggle('completed');
+                    const sessionId = targetButton.closest('.session-card').id;
+                    updateSessionProgress(sessionId);
+
+                    // Feedback motivant
+                    if (targetButton.classList.contains('completed')) {
+                        feedbackDiv.textContent = "Bien joué ! Continue comme ça 💪";
+                        setTimeout(() => {
+                            feedbackDiv.textContent = "";
+                        }, 2000);
                     }
-                });
+
+                    // Gestion du minuteur de repos
+                    resetRestTimer();
+
+                } else if (targetButton === addButton) {
+                    addedSetCount++;
+                    const newSetButton = document.createElement('button');
+                    newSetButton.classList.add('set-button');
+                    newSetButton.dataset.exercise = exerciseName;
+                    newSetButton.dataset.set = addedSetCount;
+                    newSetButton.textContent = addedSetCount;
+                    controls.insertBefore(newSetButton, addButton); // Insère avant le bouton '+'
+
+                    newSetButton.addEventListener('click', function() {
+                        this.classList.toggle('completed');
+                        const sessionId = this.closest('.session-card').id;
+                        updateSessionProgress(sessionId);
+
+                        // Feedback motivant
+                        if (this.classList.contains('completed')) {
+                            feedbackDiv.textContent = "Série ajoutée ! Bravo ! 💪";
+                            setTimeout(() => {
+                                feedbackDiv.textContent = "";
+                            }, 2000);
+                        }
+
+                        // Gestion du minuteur de repos
+                        resetRestTimer();
+                    });
+                }
+                const sessionId = controls.closest('.session-card').id;
+                updateSessionProgress(sessionId);
             });
         });
 
-        // Styles d'animation pour les confettis (à ajouter dans la section <style>)
-        const styleSheet = document.createElement("style");
-        styleSheet.type = "text/css";
-        styleSheet.innerText = `
-            @keyframes confetti-fall {
-                0% {
-                    opacity: 1;
-                    transform: translateY(0) rotateX(0);
-                }
-                100% {
-                    opacity: 0;
-                    transform: translateY(100vh) rotateX(360deg);
-                }
+        function resetRestTimer() {
+            if (restInterval) {
+                clearInterval(restInterval);
+                restInterval = null;
             }
-        `;
-        document.head.appendChild(styleSheet);
 
-        // Démarre le chronomètre par défaut sur l'écran programme
-        if (document.getElementById('programme-screen').classList.contains('active')) {
-            startChronometer();
+            let timeLeft = restDuration;
+            timerSpan.textContent = timeLeft;
+            restTimerDiv.style.display = 'block';
+
+            restInterval = setInterval(() => {
+                timeLeft--;
+                timerSpan.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(restInterval);
+                    restInterval = null;
+                    restTimerDiv.style.display = 'none';
+                    feedbackDiv.textContent = "Prêt pour la prochaine série ! 🔥";
+                    setTimeout(() => {
+                        feedbackDiv.textContent = "";
+                    }, 2000);
+                }
+            }, 1000);
         }
+
+        // Initialiser la progression des sessions au chargement
+        document.querySelectorAll('.session-card').forEach(card => {
+            updateSessionProgress(card.id);
+        });
     </script>
 </body>
 </html>
