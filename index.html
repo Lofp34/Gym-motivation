@@ -2,788 +2,1234 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>MVP Sport - Tiny Habits & Behavior Design</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- STYLES INLINE POUR UN FICHIER UNIQUE -->
+  <meta name="viewport" content="width=device-width, viewport-fit=cover, initial-scale=1.0" />
+  <title>Mon Coach Virtuel - Programme & Journal</title>
+  <!-- Police Google -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+  />
   <style>
-    /* RESET BASIQUE */
-    * {
-      margin: 0; 
-      padding: 0;
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    /*************************************************
+     * VARIABLES DE COULEUR ET PARAMÈTRES
+     *************************************************/
+    :root {
+      --primary-color: #5865F2;         /* Discord Blurple */
+      --secondary-color: #43B581;       /* Vert vibrant */
+      --accent-color: #FEE75C;          /* Jaune solaire */
+      --background-color: #F4F6FA;      /* Gris clair */
+      --card-background: #FFFFFF;       /* Blanc */
+      --text-color-primary: #36393F;    /* Gris foncé */
+      --text-color-secondary: #72767D;  /* Gris moyen */
+      --border-radius: 12px;
+      --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     body {
-      background-color: #f7f7f7;
-      color: #333;
-      line-height: 1.4;
-      font-size: 16px;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    header,
-    nav,
-    section,
-    footer {
-      width: 100%;
-      max-width: 400px;
-      margin: auto;
-      padding: 1em;
-    }
-
-    /* NAVIGATION SIMPLE */
-    .nav-bar {
-      display: flex;
-      justify-content: space-around;
-      margin-bottom: 1em;
-      align-items: center;
-    }
-    .nav-bar button {
-      background: none;
-      border: none;
-      font-size: 1rem;
-      color: inherit;
-      padding: 0.5em 1em;
-      cursor: pointer;
-    }
-    .nav-bar button.active {
-      font-weight: bold;
-      color: #3B82F6;
-    }
-
-    /* TITRES ET SECTIONS */
-    h1, h2 {
-      margin-bottom: 0.5em;
-    }
-    h1 {
-      font-size: 1.6rem;
-      color: #3B82F6; 
-    }
-    h2 {
-      font-size: 1.2rem;
-      margin-top: 0.5em;
-    }
-    p {
-      margin-bottom: 0.5em;
-    }
-
-    /* BOUTONS CTA */
-    .btn {
-      display: inline-block;
-      background: linear-gradient(45deg, #3B82F6, #7C3AED);
-      color: #fff;
-      text-align: center;
-      padding: 0.8em 1.2em;
-      border-radius: 8px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      margin: 1em 0;
-      font-weight: 500;
-      transition: transform 0.2s;
-    }
-    .btn:hover {
-      transform: scale(0.98);
-    }
-
-    /* SECTIONS (HIDDEN/ACTIVE) */
-    section {
-      display: none; 
-    }
-    section.active {
-      display: block;
-      animation: fadeIn 0.4s ease-in-out;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    /* PROGRAM CARDS */
-    .program-card {
-      background: #fff;
-      border-radius: 8px;
-      padding: 1em;
-      margin-bottom: 0.8em;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .program-card:hover {
-      background: #f0f4ff;
-    }
-
-    /* MODAL TUTORIEL */
-    .tutorial-overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      color: #fff;
-      display: none; /* hidden par défaut */
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 1em;
-      text-align: center;
-    }
-    .tutorial-overlay.active {
-      display: flex;
-    }
-    .tutorial-box {
-      max-width: 300px;
-    }
-    .tutorial-box h2 {
-      margin-bottom: 0.5em;
-      font-size: 1.4rem;
-    }
-    .tutorial-box p {
-      margin-bottom: 1em;
-    }
-
-    /* EXERCISE LIST + DRAG & DROP */
-    .exercise-list {
-      list-style: none;
-      margin: 1em 0;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
       padding: 0;
+      background-color: var(--background-color);
+      color: var(--text-color-primary);
+      min-height: 100vh;
+      -webkit-overflow-scrolling: touch;
     }
-    .exercise-item {
-      background: #fff;
-      border-radius: 6px;
-      padding: 0.8em;
-      margin-bottom: 0.5em;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
+
+    /*************************************************
+     * HEADER AVEC NAVIGATION (PROGRAMME / JOURNAL)
+     *************************************************/
+    header {
+      background: linear-gradient(
+        135deg,
+        var(--primary-color) 0%,
+        var(--secondary-color) 100%
+      );
+      color: white;
+      text-align: center;
+      width: 100%;
+      box-shadow: var(--box-shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: background-color 0.3s, opacity 0.3s;
-    }
-    .exercise-item.dragged {
-      opacity: 0.5;
-      border: 2px dashed #3B82F6; /* icône plus marquée */
-    }
-    .exercise-item.drag-over {
-      outline: 2px dashed #3B82F6;
-      outline-offset: -4px;
-    }
-    .exercise-item.done {
-      background-color: #e4fce3;
-    }
-    .exercise-left {
-      flex: 1;
-      margin-right: 1em;
+      padding: 10px 20px;
+      box-sizing: border-box;
     }
 
-    /* PROGRESSION VISUELLE : barres ou cercles */
-    .exercise-progress {
+    .header-left {
       display: flex;
-      gap: 4px;
-    }
-    .circle {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #ddd;
-    }
-    .circle.filled {
-      background: #3B82F6;
+      align-items: center;
+      gap: 10px;
     }
 
-    /* DONE-BTN masquée (remplacée par la zone de progression) */
-    .done-btn {
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      font-size: 1.2rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-button {
+      background-color: transparent;
+      color: #fff;
+      border: 1px solid white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .nav-button.active {
+      background-color: white;
+      color: var(--primary-color);
+    }
+
+    /* Minuteur de repos dans le header */
+    .rest-timer-header {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent-color);
+    }
+
+    /*************************************************
+     * CONTENUS DE L'APPLICATION
+     *************************************************/
+    .container {
+      max-width: 600px;
+      width: 90%;
+      margin: 0 auto;
+      padding: 20px 0;
+      box-sizing: border-box;
+    }
+
+    /* Pages cachées / affichées dynamiquement */
+    .page {
       display: none;
     }
 
-    /* FIN DE SEANCE - REWARDS BOX */
-    .rewards-box {
-      background: #fff;
-      border-radius: 8px;
-      text-align: center;
-      padding: 1em;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
-      margin-bottom: 1em;
-    }
-    .reward-message {
-      font-size: 1rem;
-      margin-top: 1em;
-      color: #3B82F6;
-      font-weight: bold;
+    .page.active {
+      display: block;
     }
 
-    /* WEEKLY SUMMARY */
-    .week-summary {
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 1em;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
-      margin-bottom: 1em;
-      text-align: center;
+    /*************************************************
+     * PAGE PROGRAMME (SIMILAIRE AU CODE EXISTANT)
+     *************************************************/
+    .session-card {
+      background-color: var(--card-background);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: transform 0.2s ease-in-out;
     }
-    .week-summary h3 {
-      margin-bottom: 0.5em;
-      color: #3B82F6;
+    .session-card:hover {
+      transform: scale(1.02);
+    }
+
+    .session-card h2 {
+      color: var(--primary-color);
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-weight: 500;
+    }
+
+    .exercise-group {
+      margin-bottom: 15px;
+    }
+
+    .exercise-group h3 {
+      color: var(--text-color-secondary);
+      margin-top: 0;
+      margin-bottom: 10px;
       font-size: 1rem;
+      font-weight: 400;
     }
-    .week-days {
+
+    .exercise {
       display: flex;
       justify-content: space-between;
-      margin-top: 1em;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
     }
-    .day-circle {
-      width: 40px; 
-      height: 40px; 
+
+    .exercise:last-child {
+      border-bottom: none;
+    }
+
+    .exercise-name {
+      font-weight: 500;
+    }
+
+    .set-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .set-button {
+      background-color: transparent;
+      border: 2px solid var(--secondary-color);
+      color: var(--secondary-color);
       border-radius: 50%;
-      background-color: #e2e2e2;
-      display: flex; 
-      align-items: center; 
+      width: 30px;
+      height: 30px;
+      display: flex;
       justify-content: center;
-      font-size: 0.75rem;
+      align-items: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+      position: relative;
+    }
+    .set-button.completed {
+      background-color: var(--secondary-color);
+      color: white;
+      border-color: var(--secondary-color);
+    }
+    .set-button:focus {
+      outline: none;
+    }
+
+    .session-progress {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 5px;
+      font-size: 0.8rem;
+      color: var(--text-color-secondary);
+    }
+    .session-progress span {
+      margin-left: 5px;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .set-button.completed {
+      animation: pulse 0.5s ease-in-out;
+    }
+
+    /*************************************************
+     * MESSAGE DE FEEDBACK GÉNÉRAL
+     *************************************************/
+    .feedback-message {
+      text-align: center;
+      margin-top: 20px;
+      font-style: italic;
+      color: var(--text-color-secondary);
+      min-height: 20px;
+    }
+
+    /*************************************************
+     * MODAL POUR SAISIE RÉPS & POIDS
+     *************************************************/
+    .modal-overlay {
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.4);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      width: 80%;
+      max-width: 300px;
+      box-shadow: var(--box-shadow);
+    }
+    .modal h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    .modal label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .modal select {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    .modal-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .modal-button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .cancel-button {
+      background-color: #E1E1E1;
       color: #333;
     }
-    .day-circle.done {
-      background-color: #34D399;
+    .save-button {
+      background-color: var(--primary-color);
       color: #fff;
     }
 
-    /* OBJECTIFS / HISTORIQUE */
-    .objectives-box, .history-box {
+    /*************************************************
+     * PAGE JOURNAL : CALENDRIER & STATISTIQUES
+     *************************************************/
+    .calendar-container {
+      background-color: var(--card-background);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 20px;
+    }
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .calendar-header h2 {
+      margin: 0;
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    .day-cell {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      text-align: center;
+      padding: 10px 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .day-cell:hover {
+      background-color: #f2f2f2;
+    }
+    .day-cell.workout {
+      background-color: var(--secondary-color);
+      color: #fff;
+      border-color: var(--secondary-color);
+    }
+    .day-number {
+      font-weight: 600;
+    }
+
+    /* Carte d'entraînement du jour sélectionné */
+    .journal-detail {
+      margin-top: 20px;
+      padding: 15px;
       background: #fff;
-      border-radius: 8px;
-      padding: 1em;
-      margin-bottom: 1em;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
     }
-    .objectives-box h3, .history-box h3 {
-      color: #3B82F6;
-      margin-bottom: 0.5em;
+    .journal-detail h3 {
+      margin-top: 0;
+      color: var(--primary-color);
     }
-
-    /* INPUTS */
-    .form-group {
-      margin-bottom: 1em;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.3em;
-      font-weight: bold;
-    }
-    input[type="number"], select {
-      width: 100%;
-      padding: 0.5em;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+    .entry-exercise {
+      border-bottom: 1px solid #eee;
+      padding: 8px 0;
+      font-size: 0.9rem;
     }
 
-    /* CONFETTI CANVAS */
-    #confetti-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
+    /* Statistiques mensuelles */
+    .monthly-stats {
+      margin-top: 20px;
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 15px;
+    }
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .stats-label {
+      color: var(--text-color-secondary);
+      font-size: 0.9rem;
+    }
+    .stats-value {
+      font-weight: 600;
+    }
+    .progress-bar-container {
+      background-color: #eee;
+      border-radius: 10px;
+      height: 10px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      background-color: var(--accent-color);
       height: 100%;
-      pointer-events: none;
-      z-index: 9999;
+      width: 0%;
+      border-radius: 10px;
+      transition: width 0.3s ease-in-out;
+    }
+
+    /* Responsivité */
+    @media (max-width: 400px) {
+      header {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .nav-button {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+      }
+      .rest-timer-header {
+        margin-top: 4px;
+      }
+      .session-card {
+        padding: 15px;
+      }
+      .calendar-grid {
+        gap: 2px;
+      }
+      .day-cell {
+        padding: 6px 3px;
+      }
+      .modal {
+        width: 90%;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- CANVAS POUR CONFETTI -->
-  <canvas id="confetti-canvas"></canvas>
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <h1>Mon Coach Virtuel</h1>
+    </div>
+    <div class="header-right">
+      <!-- Minuteur de repos toujours visible -->
+      <div class="rest-timer-header">
+        Repos: <span id="timer">--</span> sec
+      </div>
+      <!-- Boutons de navigation : Programme / Journal -->
+      <div class="nav-buttons">
+        <button class="nav-button active" data-target="programmePage">Programme</button>
+        <button class="nav-button" data-target="journalPage">Journal</button>
+      </div>
+    </div>
+  </header>
 
-  <!-- TUTORIAL OVERLAY (bulles explicatives) -->
-  <div class="tutorial-overlay" id="tutorialOverlay">
-    <div class="tutorial-box">
-      <h2>Bienvenue !</h2>
-      <p>Découvre comment utiliser cette application :
-        <br>- Clique ou double-clique sur les cercles pour valider les séries.
-        <br>- Déplace (drag & drop) les exercices dans l’ordre de ton choix.
-        <br>- Configure le nombre de séries avant de commencer.
-      </p>
-      <button class="btn" id="closeTutorialBtn">C’est parti !</button>
+  <div class="container">
+
+    <!-- PAGE PROGRAMME -->
+    <div id="programmePage" class="page active">
+      <!-- Ici le code du programme (similaire à la version précédente) -->
+      <!-- Jour 1 -->
+      <div class="session-card" id="jour1">
+        <h2>Jour 1: Poitrine & Triceps</h2>
+        <div class="exercise-group">
+          <h3>Poitrine</h3>
+          <div class="exercise">
+            <span class="exercise-name">Développé couché</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="developpe-couche" data-set="1">1</button>
+              <button class="set-button" data-exercise="developpe-couche" data-set="2">2</button>
+              <button class="set-button" data-exercise="developpe-couche" data-set="3">3</button>
+              <button class="set-button" data-exercise="developpe-couche" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Écartés avec haltères</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="ecartes-halteres" data-set="1">1</button>
+              <button class="set-button" data-exercise="ecartes-halteres" data-set="2">2</button>
+              <button class="set-button" data-exercise="ecartes-halteres" data-set="3">3</button>
+              <button class="set-button" data-exercise="ecartes-halteres" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Pompes</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="pompes" data-set="1">1</button>
+              <button class="set-button" data-exercise="pompes" data-set="2">2</button>
+              <button class="set-button" data-exercise="pompes" data-set="3">3</button>
+              <button class="set-button" data-exercise="pompes" data-set="4">4</button>
+            </div>
+          </div>
+        </div>
+        <div class="exercise-group">
+          <h3>Triceps</h3>
+          <div class="exercise">
+            <span class="exercise-name">Dips sur banc</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="dips-banc" data-set="1">1</button>
+              <button class="set-button" data-exercise="dips-banc" data-set="2">2</button>
+              <button class="set-button" data-exercise="dips-banc" data-set="3">3</button>
+              <button class="set-button" data-exercise="dips-banc" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Extension triceps à la poulie</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="extension-triceps" data-set="1">1</button>
+              <button class="set-button" data-exercise="extension-triceps" data-set="2">2</button>
+              <button class="set-button" data-exercise="extension-triceps" data-set="3">3</button>
+              <button class="set-button" data-exercise="extension-triceps" data-set="4">4</button>
+            </div>
+          </div>
+        </div>
+        <div class="session-progress">
+          Progression: <span id="progress-jour1">0%</span>
+        </div>
+      </div>
+
+      <!-- Jour 2 -->
+      <div class="session-card" id="jour2">
+        <h2>Jour 2: Dos & Biceps</h2>
+        <div class="exercise-group">
+          <h3>Dos</h3>
+          <div class="exercise">
+            <span class="exercise-name">Tirage vertical</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="tirage-vertical" data-set="1">1</button>
+              <button class="set-button" data-exercise="tirage-vertical" data-set="2">2</button>
+              <button class="set-button" data-exercise="tirage-vertical" data-set="3">3</button>
+              <button class="set-button" data-exercise="tirage-vertical" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Rowing barre / haltères</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="rowing" data-set="1">1</button>
+              <button class="set-button" data-exercise="rowing" data-set="2">2</button>
+              <button class="set-button" data-exercise="rowing" data-set="3">3</button>
+              <button class="set-button" data-exercise="rowing" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Tirage poulie basse</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="tirage-poulie-basse" data-set="1">1</button>
+              <button class="set-button" data-exercise="tirage-poulie-basse" data-set="2">2</button>
+              <button class="set-button" data-exercise="tirage-poulie-basse" data-set="3">3</button>
+              <button class="set-button" data-exercise="tirage-poulie-basse" data-set="4">4</button>
+            </div>
+          </div>
+        </div>
+        <div class="exercise-group">
+          <h3>Biceps</h3>
+          <div class="exercise">
+            <span class="exercise-name">Curl biceps</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="curl-biceps" data-set="1">1</button>
+              <button class="set-button" data-exercise="curl-biceps" data-set="2">2</button>
+              <button class="set-button" data-exercise="curl-biceps" data-set="3">3</button>
+              <button class="set-button" data-exercise="curl-biceps" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Curl marteau</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="curl-marteau" data-set="1">1</button>
+              <button class="set-button" data-exercise="curl-marteau" data-set="2">2</button>
+              <button class="set-button" data-exercise="curl-marteau" data-set="3">3</button>
+              <button class="set-button" data-exercise="curl-marteau" data-set="4">4</button>
+            </div>
+          </div>
+        </div>
+        <div class="session-progress">
+          Progression: <span id="progress-jour2">0%</span>
+        </div>
+      </div>
+
+      <!-- Jour 3 -->
+      <div class="session-card" id="jour3">
+        <h2>Jour 3: Jambes & Fessiers</h2>
+        <div class="exercise-group">
+          <h3>Jambes & Fessiers</h3>
+          <div class="exercise">
+            <span class="exercise-name">Squats</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="squats" data-set="1">1</button>
+              <button class="set-button" data-exercise="squats" data-set="2">2</button>
+              <button class="set-button" data-exercise="squats" data-set="3">3</button>
+              <button class="set-button" data-exercise="squats" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Fentes marchées</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="fentes-marchees" data-set="1">1</button>
+              <button class="set-button" data-exercise="fentes-marchees" data-set="2">2</button>
+              <button class="set-button" data-exercise="fentes-marchees" data-set="3">3</button>
+              <button class="set-button" data-exercise="fentes-marchees" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Presse à cuisses</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="presse-cuisses" data-set="1">1</button>
+              <button class="set-button" data-exercise="presse-cuisses" data-set="2">2</button>
+              <button class="set-button" data-exercise="presse-cuisses" data-set="3">3</button>
+              <button class="set-button" data-exercise="presse-cuisses" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Leg Curl</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="leg-curl" data-set="1">1</button>
+              <button class="set-button" data-exercise="leg-curl" data-set="2">2</button>
+              <button class="set-button" data-exercise="leg-curl" data-set="3">3</button>
+              <button class="set-button" data-exercise="leg-curl" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Hip Thrust / Ponts fessiers</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="hip-thrust" data-set="1">1</button>
+              <button class="set-button" data-exercise="hip-thrust" data-set="2">2</button>
+              <button class="set-button" data-exercise="hip-thrust" data-set="3">3</button>
+              <button class="set-button" data-exercise="hip-thrust" data-set="4">4</button>
+            </div>
+          </div>
+        </div>
+        <div class="session-progress">
+          Progression: <span id="progress-jour3">0%</span>
+        </div>
+      </div>
+
+      <!-- Jour 4 -->
+      <div class="session-card" id="jour4">
+        <h2>Jour 4: Épaules & Abdos</h2>
+        <div class="exercise-group">
+          <h3>Épaules</h3>
+          <div class="exercise">
+            <span class="exercise-name">Développé militaire</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="developpe-militaire" data-set="1">1</button>
+              <button class="set-button" data-exercise="developpe-militaire" data-set="2">2</button>
+              <button class="set-button" data-exercise="developpe-militaire" data-set="3">3</button>
+              <button class="set-button" data-exercise="developpe-militaire" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Élévations latérales</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="elevations-laterales" data-set="1">1</button>
+              <button class="set-button" data-exercise="elevations-laterales" data-set="2">2</button>
+              <button class="set-button" data-exercise="elevations-laterales" data-set="3">3</button>
+              <button class="set-button" data-exercise="elevations-laterales" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Élévations frontales</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="elevations-frontales" data-set="1">1</button>
+              <button class="set-button" data-exercise="elevations-frontales" data-set="2">2</button>
+              <button class="set-button" data-exercise="elevations-frontales" data-set="3">3</button>
+              <button class="set-button" data-exercise="elevations-frontales" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Oiseau inversé</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="oiseau-inverse" data-set="1">1</button>
+              <button class="set-button" data-exercise="oiseau-inverse" data-set="2">2</button>
+              <button class="set-button" data-exercise="oiseau-inverse" data-set="3">3</button>
+              <button class="set-button" data-exercise="oiseau-inverse" data-set="4">4</button>
+            </div>
+          </div>
+        </div>
+        <div class="exercise-group">
+          <h3>Abdos</h3>
+          <div class="exercise">
+            <span class="exercise-name">Planche</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="planche" data-set="1">1</button>
+              <button class="set-button" data-exercise="planche" data-set="2">2</button>
+              <button class="set-button" data-exercise="planche" data-set="3">3</button>
+              <button class="set-button" data-exercise="planche" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Crunchs / Relevés de buste</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="crunchs" data-set="1">1</button>
+              <button class="set-button" data-exercise="crunchs" data-set="2">2</button>
+              <button class="set-button" data-exercise="crunchs" data-set="3">3</button>
+              <button class="set-button" data-exercise="crunchs" data-set="4">4</button>
+            </div>
+          </div>
+        </div>
+        <div class="session-progress">
+          Progression: <span id="progress-jour4">0%</span>
+        </div>
+      </div>
+
+      <!-- Jour 5 -->
+      <div class="session-card" id="jour5">
+        <h2>Jour 5: Session « Rappel » ou Circuit Full Body</h2>
+        <p>Choisissez votre option pour cette session.</p>
+        <h3>Option Circuit Full Body</h3>
+        <div class="exercise-group">
+          <div class="exercise">
+            <span class="exercise-name">Burpees / Mountain Climbers</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="burpees" data-set="1">1</button>
+              <button class="set-button" data-exercise="burpees" data-set="2">2</button>
+              <button class="set-button" data-exercise="burpees" data-set="3">3</button>
+              <button class="set-button" data-exercise="burpees" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Kettlebell Swings</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="kettlebell-swings" data-set="1">1</button>
+              <button class="set-button" data-exercise="kettlebell-swings" data-set="2">2</button>
+              <button class="set-button" data-exercise="kettlebell-swings" data-set="3">3</button>
+              <button class="set-button" data-exercise="kettlebell-swings" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Pompes / Dips sur banc</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="pompes-circuit" data-set="1">1</button>
+              <button class="set-button" data-exercise="pompes-circuit" data-set="2">2</button>
+              <button class="set-button" data-exercise="pompes-circuit" data-set="3">3</button>
+              <button class="set-button" data-exercise="pompes-circuit" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Squats sautés</span>
+            <div class="set-controls">
+              <button class="set-button" data-exercise="squats-sautes" data-set="1">1</button>
+              <button class="set-button" data-exercise="squats-sautes" data-set="2">2</button>
+              <button class="set-button" data-exercise="squats-sautes" data-set="3">3</button>
+              <button class="set-button" data-exercise="squats-sautes" data-set="4">4</button>
+            </div>
+          </div>
+          <div class="exercise">
+            <span class="exercise-name">Planche latérale</span>
+            <div class="set-controls">
+              <!-- Par exemple G1/D1, G2/D2, etc. -->
+              <button class="set-button" data-exercise="planche-laterale-gauche" data-set="1">G1</button>
+              <button class="set-button" data-exercise="planche-laterale-droite" data-set="1">D1</button>
+              <button class="set-button" data-exercise="planche-laterale-gauche" data-set="2">G2</button>
+              <button class="set-button" data-exercise="planche-laterale-droite" data-set="2">D2</button>
+            </div>
+          </div>
+        </div>
+        <div class="session-progress">
+          Progression: <span id="progress-jour5">0%</span>
+        </div>
+      </div>
+
+      <div class="feedback-message" id="feedback"></div>
+    </div>
+
+    <!-- PAGE JOURNAL -->
+    <div id="journalPage" class="page">
+      <div class="calendar-container">
+        <div class="calendar-header">
+          <h2 id="calendarMonthYear">Mon Calendrier</h2>
+        </div>
+        <div class="calendar-grid" id="calendarGrid">
+          <!-- Cases dynamiques (jours du mois) -->
+        </div>
+      </div>
+
+      <div class="journal-detail" id="journalDetail" style="display: none;">
+        <h3 id="detailTitle"></h3>
+        <div id="detailContent"></div>
+      </div>
+
+      <!-- Statistiques Mensuelles -->
+      <div class="monthly-stats" id="monthlyStats" style="display: none;">
+        <h3>Statistiques du mois</h3>
+        <div class="stats-row">
+          <div class="stats-label">Total de répétitions :</div>
+          <div class="stats-value" id="totalReps">0</div>
+        </div>
+        <div class="stats-row">
+          <div class="stats-label">Poids total soulevé :</div>
+          <div class="stats-value" id="totalWeight">0 kg</div>
+        </div>
+        <div class="stats-row">
+          <div class="stats-label">Nombre de séances :</div>
+          <div class="stats-value" id="totalSessions">0</div>
+        </div>
+        <div class="stats-row">
+          <div class="stats-label">Objectif mensuel :</div>
+          <div class="stats-value">5 séances / semaine</div>
+        </div>
+        <!-- Barre de progression -->
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="monthlyProgressBar"></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- BARRE DE NAVIGATION SIMPLIFIÉE -->
-  <nav class="nav-bar">
-    <button id="navHome" class="active">Accueil</button>
-    <button id="navProgram">Programme</button>
-    <button id="navProgress">Progression</button>
-  </nav>
-
-  <!-- SECTION ACCUEIL -->
-  <section id="home" class="active">
-    <header>
-      <h1>MVP Sport</h1>
-    </header>
-    <p>Salut Sportif ! Prêt pour ta séance du jour ?</p>
-    <!-- Personnalisation : Demande d’objectif hebdo -->
-    <div class="form-group">
-      <label for="weeklyGoal">Combien de séances par semaine vises-tu ?</label>
-      <input type="number" id="weeklyGoal" min="1" max="14" value="3" />
-    </div>
-    <p>Ex. : “Fais <span id="weeklyGoalDisplay">3</span> séances cette semaine pour déverrouiller un nouveau badge !”</p>
-    <button class="btn" id="btnStart">Lancer ma séance</button>
-  </section>
-
-  <!-- SECTION PROGRAMME -->
-  <section id="program">
-    <h2>Mon Programme Hebdo</h2>
-
-    <!-- Choix du nombre de séries -->
-    <div class="form-group">
-      <label for="userSetsChoice">Choisis ton nombre de séries (par exercice) :</label>
-      <select id="userSetsChoice">
-        <option value="3">3 séries</option>
-        <option value="4" selected>4 séries</option>
-        <option value="5">5 séries</option>
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <h3>Renseignez votre série</h3>
+      <label for="repSelect">Nombre de répétitions</label>
+      <select id="repSelect">
+        <!-- De 0 à 20 répétitions -->
       </select>
-    </div>
 
-    <div class="program-card" onclick="window.openSessionDetails('legs')">
-      <div class="program-title">Séance 1 : Jambes</div>
-      <div class="program-exercises">Squats, Fentes, Presse à cuisses, Soulevé de terre, Mollets</div>
-    </div>
-    <div class="program-card" onclick="window.openSessionDetails('backBiceps')">
-      <div class="program-title">Séance 2 : Dos & Biceps</div>
-      <div class="program-exercises">Tractions, Rowing, Tirage, Curl biceps, Curl marteau</div>
-    </div>
-    <div class="program-card" onclick="window.openSessionDetails('shouldersTriceps')">
-      <div class="program-title">Séance 3 : Épaules & Triceps</div>
-      <div class="program-exercises">Développé militaire, Élévations latérales, Oiseau, Développé couché serré, Extension triceps</div>
-    </div>
+      <label for="weightSelect">Poids utilisé</label>
+      <select id="weightSelect">
+        <!-- PDC (poids du corps) + 5 kg à 100 kg par tranche de 5 -->
+      </select>
 
-    <button class="btn" id="btnReturnHome">Retour Accueil</button>
-  </section>
-
-  <!-- SECTION DÉTAIL D'UNE SÉANCE -->
-  <section id="session-details">
-    <h2 id="sessionTitle">Détails de la Séance</h2>
-    <ul class="exercise-list" id="exerciseList">
-      <!-- Les exercices seront injectés dynamiquement via JavaScript -->
-    </ul>
-    <button class="btn" id="finishSessionBtn" style="display:none;">Terminer la séance</button>
-    <button class="btn" id="btnReturnProgram">Retour Programme</button>
-  </section>
-
-  <!-- SECTION RÉCOMPENSE (FIN DE SÉANCE) & PROGRESSION -->
-  <section id="rewards">
-    <div class="rewards-box">
-      <h2>Félicitations !</h2>
-      <p>Tu as terminé ta séance avec succès.</p>
-      <p class="reward-message" id="rewardPoints"></p>
-      <p id="streakMessage"></p>
-      <button class="btn" id="btnToProgram">Voir le programme</button>
-      <button class="btn" id="btnToHome">Accueil</button>
-    </div>
-
-    <!-- Carte de résumé Hebdomadaire -->
-    <div class="week-summary">
-      <h3>Résumé de la semaine</h3>
-      <p>Visualise tes séances sur les 7 derniers jours.</p>
-      <div class="week-days" id="weekDaysContainer">
-        <!-- Cercles dynamiques injectés par JavaScript -->
+      <div class="modal-buttons">
+        <button class="modal-button cancel-button" id="cancelModal">Annuler</button>
+        <button class="modal-button save-button" id="saveModal">Enregistrer</button>
       </div>
     </div>
+  </div>
 
-    <!-- Objectifs / Mini-défis -->
-    <div class="objectives-box">
-      <h3>Objectif hebdomadaire</h3>
-      <p>Tu as indiqué vouloir faire <span id="weekGoalEcho"></span> séance(s) cette semaine.</p>
-      <p id="objectiveStatus"></p>
-    </div>
-
-    <!-- Historique détaillé (ex. mensuel) -->
-    <div class="history-box">
-      <h3>Historique Mensuel</h3>
-      <p>Nombre de séances complétées par mois :</p>
-      <table id="monthlyHistoryTable" border="1" cellpadding="4" style="width:100%; border-collapse:collapse;">
-        <thead>
-          <tr><th>Mois</th><th>Nombre de séances</th></tr>
-        </thead>
-        <tbody id="monthlyHistoryBody">
-          <!-- Rempli en JS -->
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- Confetti library -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
-
-  <!-- SCRIPT INLINE POUR LA NAVIGATION, LA LOGIQUE MVP, DRAG & DROP, ETC. -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // --- Confetti ---
-      const confettiCanvas = document.getElementById('confetti-canvas');
-      const myConfetti = confetti.create(confettiCanvas, {
-        resize: true,
-        useWorker: true
-      });
+    /*******************************************************
+     * 1. GESTION DES SPINNERS POUR REPS ET POIDS
+     *******************************************************/
+    const repSelect = document.getElementById('repSelect');
+    const weightSelect = document.getElementById('weightSelect');
+    
+    // Remplir le sélecteur des répétitions (0 à 20)
+    for(let i=0; i<=20; i++){
+      const option = document.createElement('option');
+      option.value = i;
+      option.text = i;
+      repSelect.appendChild(option);
+    }
 
-      // TUTORIAL
-      const tutorialOverlay = document.getElementById('tutorialOverlay');
-      const closeTutorialBtn = document.getElementById('closeTutorialBtn');
+    // Remplir le sélecteur de poids
+    const pdcOption = document.createElement('option');
+    pdcOption.value = 'PDC';
+    pdcOption.text = 'PDC (Poids du corps)';
+    weightSelect.appendChild(pdcOption);
 
-      // Au premier lancement, on affiche le tutoriel si pas de flag localStorage
-      if (!localStorage.getItem('hasSeenTutorial')) {
-        tutorialOverlay.classList.add('active');
-      }
-      closeTutorialBtn.addEventListener('click', () => {
-        tutorialOverlay.classList.remove('active');
-        localStorage.setItem('hasSeenTutorial', 'true');
-      });
+    for(let w=5; w<=100; w+=5){
+      const option = document.createElement('option');
+      option.value = w;
+      option.text = w + ' kg';
+      weightSelect.appendChild(option);
+    }
 
-      // Données du programme
-      const programData = {
-        legs: {
-          title: "Séance 1 : Jambes",
-          exercises: [
-            { name: "Squats", sets: "8-12 répétitions" },
-            { name: "Fentes", sets: "10 répétitions par jambe" },
-            { name: "Presse à cuisses", sets: "10-12 répétitions" },
-            { name: "Soulevé de terre jambes tendues", sets: "12 répétitions" },
-            { name: "Mollets", sets: "15-20 répétitions" }
-          ]
-        },
-        backBiceps: {
-          title: "Séance 2 : Dos & Biceps",
-          exercises: [
-            { name: "Tractions (ou tirage poitrine)", sets: "8-12 répétitions" },
-            { name: "Rowing barre", sets: "10-12 répétitions" },
-            { name: "Tirage horizontal", sets: "12 répétitions" },
-            { name: "Curl biceps", sets: "10-12 répétitions" },
-            { name: "Curl marteau", sets: "12 répétitions" }
-          ]
-        },
-        shouldersTriceps: {
-          title: "Séance 3 : Épaules & Triceps",
-          exercises: [
-            { name: "Développé militaire", sets: "8-12 répétitions" },
-            { name: "Élévations latérales", sets: "12-15 répétitions" },
-            { name: "Oiseau (épaules arrière)", sets: "12-15 répétitions" },
-            { name: "Développé couché prise serrée", sets: "8-12 répétitions" },
-            { name: "Extension triceps", sets: "12 répétitions" }
-          ]
-        }
-      };
+    /*******************************************************
+     * 2. GESTION DU MODAL
+     *******************************************************/
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modal = document.getElementById('modal');
+    const cancelModal = document.getElementById('cancelModal');
+    const saveModal = document.getElementById('saveModal');
+    let currentButton = null; // Bouton sur lequel l’utilisateur a cliqué
 
-      // State / localStorage
-      let totalSessionsCompleted = parseInt(localStorage.getItem('totalSessionsCompleted') || '0');
-      let currentStreak = parseInt(localStorage.getItem('currentStreak') || '0');
-      let lastCompletionDate = localStorage.getItem('lastCompletionDate') || null;
-      let completedDates = JSON.parse(localStorage.getItem('completedDates') || '[]');
+    function openModal(button) {
+      currentButton = button;
+      // Charger d’éventuelles valeurs précédemment sauvegardées
+      const exerciseKey = button.getAttribute('data-exercise');
+      const setNumber = button.getAttribute('data-set');
+      const dateKey = getCurrentDateKey();
+      const savedData = getLocalStorageData(dateKey, exerciseKey, setNumber);
 
-      // Historique mensuel [mois => nb séances]
-      let monthlyHistory = JSON.parse(localStorage.getItem('monthlyHistory') || '{}');
-
-      // Navigation
-      function showSection(sectionId) {
-        document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-        document.getElementById(sectionId).classList.add('active');
-
-        document.getElementById('navHome').classList.remove('active');
-        document.getElementById('navProgram').classList.remove('active');
-        document.getElementById('navProgress').classList.remove('active');
-
-        if (sectionId === 'home') document.getElementById('navHome').classList.add('active');
-        if (sectionId === 'program') document.getElementById('navProgram').classList.add('active');
-        if (sectionId === 'rewards') {
-          document.getElementById('navProgress').classList.add('active');
-          updateWeekSummary();
-          updateObjectives();
-          updateMonthlyHistoryView();
-        }
+      if(savedData){
+        repSelect.value = savedData.reps || 0;
+        weightSelect.value = savedData.weight || 'PDC';
+      } else {
+        repSelect.value = 0;
+        weightSelect.value = 'PDC';
       }
 
-      function goHome() {
-        showSection('home');
+      modalOverlay.style.display = 'flex';
+    }
+
+    function closeModal() {
+      modalOverlay.style.display = 'none';
+      currentButton = null;
+    }
+
+    cancelModal.addEventListener('click', closeModal);
+
+    saveModal.addEventListener('click', () => {
+      if(!currentButton) return;
+      const exerciseKey = currentButton.getAttribute('data-exercise');
+      const setNumber = currentButton.getAttribute('data-set');
+      const dateKey = getCurrentDateKey();
+
+      const reps = repSelect.value;
+      const weight = weightSelect.value;
+
+      saveLocalStorageData(dateKey, exerciseKey, setNumber, reps, weight);
+
+      // Marquer le bouton comme "completed"
+      currentButton.classList.add('completed');
+      // Mettre à jour la progression de la session
+      const sessionId = currentButton.closest('.session-card').id;
+      updateSessionProgress(sessionId);
+      showFeedback("Série enregistrée !");
+      
+      // Redémarrer le minuteur
+      startRestTimer();
+
+      closeModal();
+      // Mise à jour du calendrier (journal)
+      if(document.getElementById('journalPage').classList.contains('active')){
+        generateCalendar(currentMonth, currentYear);
       }
-      function goProgram() {
-        showSection('program');
-      }
-      function goRewards() {
-        showSection('rewards');
-      }
-
-      // Objectif
-      const weeklyGoalInput = document.getElementById('weeklyGoal');
-      const weeklyGoalDisplay = document.getElementById('weeklyGoalDisplay');
-      weeklyGoalDisplay.textContent = weeklyGoalInput.value;
-      weeklyGoalInput.addEventListener('input', () => {
-        weeklyGoalDisplay.textContent = weeklyGoalInput.value;
-      });
-
-      // Événements barre nav
-      document.getElementById('navHome').addEventListener('click', goHome);
-      document.getElementById('navProgram').addEventListener('click', goProgram);
-      document.getElementById('navProgress').addEventListener('click', goRewards);
-
-      document.getElementById('btnReturnHome').addEventListener('click', goHome);
-      document.getElementById('btnReturnProgram').addEventListener('click', goProgram);
-      document.getElementById('btnToProgram').addEventListener('click', goProgram);
-      document.getElementById('btnToHome').addEventListener('click', goHome);
-
-      // Bouton start
-      document.getElementById('btnStart').addEventListener('click', goProgram);
-
-      // Nombre de séries choisi par l’utilisateur
-      const userSetsChoice = document.getElementById('userSetsChoice');
-
-      // Ouvrir détails d'une séance
-      window.openSessionDetails = function(sessionKey) {
-        const session = programData[sessionKey];
-        if (!session) return;
-
-        const sessionTitle = document.getElementById('sessionTitle');
-        sessionTitle.textContent = session.title;
-
-        // Nettoyer la liste
-        const exerciseList = document.getElementById('exerciseList');
-        exerciseList.innerHTML = '';
-
-        // Récupérer le nombre de séries
-        const setsCount = parseInt(userSetsChoice.value);
-
-        session.exercises.forEach(ex => {
-          const li = document.createElement('li');
-          li.className = 'exercise-item';
-          li.draggable = true;
-
-          // On propose un champ "poids" en option
-          const htmlLeft = `
-            <div class="exercise-left">
-              <div class="exercise-name">${ex.name}</div>
-              <div class="exercise-details">${ex.sets}</div>
-              <label style="display:block; margin-top:4px;">
-                Poids (optionnel):
-                <input type="number" style="width:80px" min="0" step="1" />
-              </label>
-            </div>
-          `;
-
-          // Création d’une zone de progression
-          let circlesHTML = '';
-          for (let i=0; i<setsCount; i++){
-            circlesHTML += `<div class="circle"></div>`;
-          }
-          const progressHTML = `<div class="exercise-progress">${circlesHTML}</div>`;
-
-          li.innerHTML = htmlLeft + progressHTML;
-
-          // Drag & Drop
-          li.addEventListener('dragstart', dragStart);
-          li.addEventListener('dragover', dragOver);
-          li.addEventListener('dragleave', dragLeave);
-          li.addEventListener('drop', dropItem);
-          li.addEventListener('dragend', dragEnd);
-
-          // Gérer clics (simple / double) sur les cercles pour valider séries
-          const circleEls = li.querySelectorAll('.circle');
-          circleEls.forEach((circle, index) => {
-            // Au clic : on remplit le cercle suivant
-            circle.addEventListener('click', () => fillNextCircle(circleEls, index));
-            // Au double-clic (plus rapide)
-            circle.addEventListener('dblclick', () => fillNextCircle(circleEls, index));
-          });
-
-          exerciseList.appendChild(li);
-        });
-
-        document.getElementById('finishSessionBtn').style.display = 'none';
-        showSection('session-details');
-      };
-
-      // Fonction pour remplir un cercle (et ceux avant lui) => valider la série
-      function fillNextCircle(circleEls, indexClicked){
-        // On remplit le cercle cliqué + tous ceux avant si besoin
-        for (let i=0; i<= indexClicked; i++){
-          circleEls[i].classList.add('filled');
-        }
-        checkAllExercisesDone();
-      }
-
-      // Vérifier si tous les exercices sont faits
-      function checkAllExercisesDone() {
-        const setsCount = parseInt(userSetsChoice.value);
-        const allExercises = document.querySelectorAll('#exerciseList .exercise-item');
-        let allDone = true;
-
-        allExercises.forEach(item => {
-          const circles = item.querySelectorAll('.circle');
-          // Condition => toutes les circles “filled”
-          const filledCount = [...circles].filter(c => c.classList.contains('filled')).length;
-          if (filledCount < setsCount){
-            allDone = false;
-          } else {
-            // colorer l’item pour dire “done”
-            item.classList.add('done');
-          }
-        });
-
-        if (allDone) {
-          document.getElementById('finishSessionBtn').style.display = 'block';
-        }
-      }
-
-      // FIN DE SEANCE
-      document.getElementById('finishSessionBtn').addEventListener('click', () => {
-        totalSessionsCompleted++;
-        localStorage.setItem('totalSessionsCompleted', totalSessionsCompleted);
-
-        const today = new Date().toLocaleDateString('fr-CA');
-        if (lastCompletionDate === today) {
-          // déjà fait
-        } else {
-          if (lastCompletionDate) {
-            const diff = new Date(today) - new Date(lastCompletionDate);
-            if (diff === 86400000) {
-              currentStreak++;
-            } else {
-              currentStreak = 1;
-            }
-          } else {
-            currentStreak = 1;
-          }
-        }
-        localStorage.setItem('currentStreak', currentStreak);
-        localStorage.setItem('lastCompletionDate', today);
-        lastCompletionDate = today;
-
-        // Ajout dans completedDates
-        if (!completedDates.includes(today)) {
-          completedDates.push(today);
-          localStorage.setItem('completedDates', JSON.stringify(completedDates));
-        }
-
-        // Mise à jour historique mensuel
-        const thisMonth = (new Date()).toISOString().slice(0,7); // ex “2024-01”
-        if (!monthlyHistory[thisMonth]) {
-          monthlyHistory[thisMonth] = 0;
-        }
-        monthlyHistory[thisMonth]++;
-        localStorage.setItem('monthlyHistory', JSON.stringify(monthlyHistory));
-
-        document.getElementById('rewardPoints').textContent = 
-          `Tu as complété ${totalSessionsCompleted} séance(s) au total !`;
-        document.getElementById('streakMessage').textContent =
-          `Streak actuel : ${currentStreak} jour(s) consécutif(s) !`;
-
-        myConfetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
-        goRewards();
-      });
-
-      // Semaine
-      function updateWeekSummary() {
-        const container = document.getElementById('weekDaysContainer');
-        container.innerHTML = '';
-        const now = new Date();
-        for (let i = 6; i >= 0; i--) {
-          const checkDate = new Date(now);
-          checkDate.setDate(checkDate.getDate() - i);
-          const dayStr = checkDate.toISOString().split('T')[0];
-          const options = { weekday: 'short' };
-          const dayLabel = checkDate.toLocaleDateString('fr-FR', options);
-
-          const dayDiv = document.createElement('div');
-          dayDiv.className = 'day-circle';
-          if (completedDates.includes(dayStr)) {
-            dayDiv.classList.add('done');
-          }
-          dayDiv.textContent = dayLabel;
-          container.appendChild(dayDiv);
-        }
-      }
-
-      // Objectifs
-      function updateObjectives(){
-        const weekGoalEcho = document.getElementById('weekGoalEcho');
-        weekGoalEcho.textContent = weeklyGoalInput.value;
-        const objectiveStatus = document.getElementById('objectiveStatus');
-
-        // Nombre de séances faites sur les 7 derniers jours
-        const now = new Date();
-        let countThisWeek = 0;
-        for (let i=0; i<7; i++){
-          const check = new Date(now);
-          check.setDate(check.getDate() - i);
-          const ds = check.toISOString().split('T')[0];
-          if (completedDates.includes(ds)) {
-            countThisWeek++;
-          }
-        }
-
-        if (countThisWeek >= weeklyGoalInput.value) {
-          objectiveStatus.textContent = "Bravo ! Objectif atteint cette semaine ! Nouveau badge débloqué !";
-        } else {
-          objectiveStatus.textContent = `Tu as fait ${countThisWeek} séance(s) cette semaine. Encore ${(weeklyGoalInput.value - countThisWeek)} pour atteindre ton objectif !`;
-        }
-      }
-
-      // Historique mensuel
-      function updateMonthlyHistoryView(){
-        const tbody = document.getElementById('monthlyHistoryBody');
-        tbody.innerHTML = '';
-        // monthlyHistory => { "2024-01": 5, "2024-02": 2, ... }
-        const sortedKeys = Object.keys(monthlyHistory).sort();
-        sortedKeys.forEach(key => {
-          const tr = document.createElement('tr');
-          const tdMonth = document.createElement('td');
-          const tdCount = document.createElement('td');
-          tdMonth.textContent = key; 
-          tdCount.textContent = monthlyHistory[key];
-          tr.appendChild(tdMonth);
-          tr.appendChild(tdCount);
-          tbody.appendChild(tr);
-        });
-      }
-
-      // DRAG & DROP
-      let draggedItem = null;
-      function dragStart(e) {
-        draggedItem = this;
-        this.classList.add('dragged');
-        e.dataTransfer.effectAllowed = "move";
-      }
-      function dragOver(e) {
-        e.preventDefault();
-        this.classList.add('drag-over');
-      }
-      function dragLeave(e) {
-        this.classList.remove('drag-over');
-      }
-      function dropItem(e) {
-        e.preventDefault();
-        this.classList.remove('drag-over');
-        if (draggedItem !== this) {
-          const exerciseList = document.getElementById('exerciseList');
-          const items = [...exerciseList.children];
-          const draggedIndex = items.indexOf(draggedItem);
-          const droppedIndex = items.indexOf(this);
-
-          if (draggedIndex < droppedIndex) {
-            exerciseList.insertBefore(draggedItem, this.nextSibling);
-          } else {
-            exerciseList.insertBefore(draggedItem, this);
-          }
-        }
-      }
-      function dragEnd(e) {
-        this.classList.remove('dragged');
-        document.querySelectorAll('.exercise-item').forEach(item => {
-          item.classList.remove('drag-over');
-        });
-        draggedItem = null;
-      }
-
     });
+
+    /*******************************************************
+     * 3. GESTION DU LOCALSTORAGE
+     *******************************************************/
+    // on stocke sous forme :
+    // data = {
+    //   [dateKey]: {
+    //     [exerciseName]: {
+    //       [setNumber]: { reps, weight }
+    //     },
+    //     ...
+    //   },
+    //   ...
+    // }
+    function getLocalStorage() {
+      const data = localStorage.getItem('monCoachVirtuelData');
+      return data ? JSON.parse(data) : {};
+    }
+    function setLocalStorage(data) {
+      localStorage.setItem('monCoachVirtuelData', JSON.stringify(data));
+    }
+
+    function saveLocalStorageData(dateKey, exerciseName, setNumber, reps, weight) {
+      const data = getLocalStorage();
+      if(!data[dateKey]) data[dateKey] = {};
+      if(!data[dateKey][exerciseName]) data[dateKey][exerciseName] = {};
+      data[dateKey][exerciseName][setNumber] = { reps, weight };
+      setLocalStorage(data);
+    }
+
+    function getLocalStorageData(dateKey, exerciseName, setNumber) {
+      const data = getLocalStorage();
+      if(!data[dateKey]) return null;
+      if(!data[dateKey][exerciseName]) return null;
+      return data[dateKey][exerciseName][setNumber] || null;
+    }
+
+    /*******************************************************
+     * 4. MINUTEUR DE REPOS
+     *******************************************************/
+    const timerSpan = document.getElementById('timer');
+    let restInterval;
+    let restDuration = 60; // 60 secondes par défaut
+
+    function startRestTimer(){
+      if(restInterval){
+        clearInterval(restInterval);
+        restInterval = null;
+      }
+      let timeLeft = restDuration;
+      timerSpan.textContent = timeLeft;
+
+      restInterval = setInterval(() => {
+        timeLeft--;
+        timerSpan.textContent = timeLeft;
+        if(timeLeft <= 0){
+          clearInterval(restInterval);
+          restInterval = null;
+          timerSpan.textContent = 'Terminé';
+          showFeedback("Fin du repos, c'est reparti !");
+        }
+      }, 1000);
+    }
+
+    /*******************************************************
+     * 5. PROGRESSION DANS CHAQUE SESSION
+     *******************************************************/
+    function updateSessionProgress(sessionId) {
+      const sessionCard = document.getElementById(sessionId);
+      const totalSets = sessionCard.querySelectorAll('.set-button').length;
+      const completedSets = sessionCard.querySelectorAll('.set-button.completed').length;
+      const progressPercent = Math.round((completedSets / totalSets) * 100);
+      document.getElementById(`progress-${sessionId}`).textContent = `${progressPercent}%`;
+    }
+
+    /*******************************************************
+     * 6. FEEDBACK
+     *******************************************************/
+    const feedbackDiv = document.getElementById('feedback');
+    function showFeedback(message) {
+      feedbackDiv.textContent = message;
+      setTimeout(() => {
+        if(feedbackDiv.textContent === message) {
+          feedbackDiv.textContent = "";
+        }
+      }, 2000);
+    }
+
+    /*******************************************************
+     * 7. INITIALISATION DES BOUTONS DE SÉRIE
+     *******************************************************/
+    const setButtons = document.querySelectorAll('.set-button');
+    setButtons.forEach(button => {
+      // Au clic, on ouvre le modal (puis on relancera le timer quand on enregistre)
+      button.addEventListener('click', function(){
+        openModal(this);
+      });
+    });
+
+    // Au chargement, marquer en "completed" si déjà sauvegardé
+    window.addEventListener('DOMContentLoaded', () => {
+      markCompletedSets();
+      // Mise à jour de la progression dans chaque carte
+      document.querySelectorAll('.session-card').forEach(card => {
+        updateSessionProgress(card.id);
+      });
+    });
+
+    function markCompletedSets(){
+      // On parcourt tous les boutons et on regarde si localStorage a des infos
+      const dateKey = getCurrentDateKey(); // date du jour
+      const data = getLocalStorage();
+      // Si on veut marquer les sets passés d'autres jours, c'est plus complexe,
+      // mais ici on marque ceux du jour ou on pourrait tous les marquer (tous jours).
+      // Pour marquer tous les jours, on parcourt toutes les dates. On va opter pour
+      // un marquage global (tous jours) : si un set a été fait un jour quelconque,
+      // on "pourrait" le marquer. Cependant, souvent on ne veut marquer que pour la journée.
+      // On reste simple : on marque si la date du jour a les sets.
+      // (On peut adapter selon les besoins.)
+
+      setButtons.forEach(btn => {
+        const exerciseName = btn.getAttribute('data-exercise');
+        const setNumber = btn.getAttribute('data-set');
+        // On vérifie toutes les dates ? on part de l'hypothèse : 
+        // "Complété" = déjà fait un jour = stats globales 
+        // Mais on va faire un check "jour en cours" pour rester cohérent.
+        if(data[dateKey] && data[dateKey][exerciseName] && data[dateKey][exerciseName][setNumber]){
+          btn.classList.add('completed');
+        }
+      });
+    }
+
+    // Date key (pour journal) : "YYYY-MM-DD"
+    function getCurrentDateKey(){
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      return `${year}-${month}-${day}`;
+    }
+
+    /*******************************************************
+     * 8. SWITCH ENTRE LES PAGES
+     *******************************************************/
+    const navButtons = document.querySelectorAll('.nav-button');
+    const pages = document.querySelectorAll('.page');
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', function(){
+        navButtons.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const targetId = this.getAttribute('data-target');
+        pages.forEach(p => p.classList.remove('active'));
+        document.getElementById(targetId).classList.add('active');
+
+        // Si on vient sur la page "journalPage", on génère le calendrier
+        if(targetId === 'journalPage'){
+          generateCalendar(currentMonth, currentYear);
+        }
+      });
+    });
+
+    /*******************************************************
+     * 9. JOURNAL : CALENDRIER + DÉTAIL DE LA JOURNÉE
+     *******************************************************/
+    const calendarGrid = document.getElementById('calendarGrid');
+    const journalDetail = document.getElementById('journalDetail');
+    const detailTitle = document.getElementById('detailTitle');
+    const detailContent = document.getElementById('detailContent');
+    const monthlyStats = document.getElementById('monthlyStats');
+    const totalRepsEl = document.getElementById('totalReps');
+    const totalWeightEl = document.getElementById('totalWeight');
+    const totalSessionsEl = document.getElementById('totalSessions');
+    const monthlyProgressBar = document.getElementById('monthlyProgressBar');
+    const calendarMonthYear = document.getElementById('calendarMonthYear');
+
+    // On va afficher le mois en cours (et l'année)
+    const now = new Date();
+    let currentMonth = now.getMonth();  // 0-11
+    let currentYear = now.getFullYear();
+
+    function generateCalendar(month, year){
+      calendarGrid.innerHTML = '';
+      journalDetail.style.display = 'none';
+      monthlyStats.style.display = 'none';
+
+      // Titre : ex. "Juillet 2023"
+      const monthNames = [
+        'Janvier','Février','Mars','Avril','Mai','Juin',
+        'Juillet','Août','Septembre','Octobre','Novembre','Décembre'
+      ];
+      calendarMonthYear.textContent = `${monthNames[month]} ${year}`;
+
+      // 1) Premier jour du mois
+      const firstDay = new Date(year, month, 1).getDay(); 
+      // En JS, getDay() renvoie 0 (Dim) à 6 (Sam).
+      // On veut un calendrier Lun->Dim ou Dim->Sam ? 
+      // On va supposer un Dim->Sam (par défaut en JS).
+      // 2) Nombre de jours dans le mois
+      const daysInMonth = new Date(year, month+1, 0).getDate();
+
+      // 3) On crée des cases "vides" avant le 1er jour, si besoin
+      //    (pour aligner le 1er jour dans le calendrier).
+      //    Si firstDay=0 (Dimanche), on met 0 "blancs", si firstDay=1 (Lundi), 1 ...
+      //    A adapter selon la convention de départ (ici Dimanche = 0).
+      for(let i=0; i<firstDay; i++){
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'day-cell';
+        calendarGrid.appendChild(emptyCell);
+      }
+
+      // 4) On crée les jours réels
+      const data = getLocalStorage();
+      for(let day=1; day <= daysInMonth; day++){
+        const cell = document.createElement('div');
+        cell.className = 'day-cell';
+
+        const dayNum = document.createElement('div');
+        dayNum.className = 'day-number';
+        dayNum.textContent = day;
+        cell.appendChild(dayNum);
+
+        // On formate la date en YYYY-MM-DD
+        const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+
+        // Vérif si on a des datas pour ce jour
+        if(data[dateKey]){
+          cell.classList.add('workout');
+        }
+
+        // Au clic, on affiche le détail
+        cell.addEventListener('click', () => {
+          showDayDetail(dateKey);
+        });
+
+        calendarGrid.appendChild(cell);
+      }
+
+      // 5) Calcul et affichage des stats mensuelles
+      calculateMonthlyStats(month, year);
+    }
+
+    function showDayDetail(dateKey){
+      journalDetail.style.display = 'block';
+      detailTitle.textContent = `Détail du ${dateKey}`;
+      detailContent.innerHTML = '';
+
+      const data = getLocalStorage();
+      const dayData = data[dateKey];
+      if(!dayData){
+        detailContent.innerHTML = '<p>Aucun entraînement ce jour-là.</p>';
+        return;
+      }
+
+      // dayData = { exerciseName: { setNumber: {reps, weight}, ... }, ... }
+      // On va lister exercice par exercice
+      for(const exName in dayData){
+        const sets = dayData[exName];
+        for(const setNum in sets){
+          const info = sets[setNum];
+          const divEx = document.createElement('div');
+          divEx.className = 'entry-exercise';
+          divEx.textContent = `${exName} - Série ${setNum} : ${info.reps} rép., ${info.weight}`;
+          detailContent.appendChild(divEx);
+        }
+      }
+    }
+
+    function calculateMonthlyStats(month, year){
+      monthlyStats.style.display = 'block';
+
+      // On parcourt toutes les dates du mois, on additionne total reps, total weight, et nb de séances
+      let repsSum = 0;
+      let weightSum = 0;
+      let sessionCount = 0;
+
+      const data = getLocalStorage();
+      const daysInMonth = new Date(year, month+1, 0).getDate();
+
+      for(let d=1; d<=daysInMonth; d++){
+        const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        if(data[dateKey]){
+          // On compte 1 séance si on a au moins un exercice pour ce jour
+          sessionCount++;
+          // On accumule le total reps & total weight
+          for(const exName in data[dateKey]){
+            for(const setNum in data[dateKey][exName]){
+              const info = data[dateKey][exName][setNum];
+              const reps = parseInt(info.reps, 10) || 0;
+              let w = 0;
+              if(info.weight === 'PDC') {
+                // On ne sait pas le poids exact, on peut considérer PDC = 0 ou un placeholder
+                w = 0;
+              } else {
+                w = parseInt(info.weight, 10) || 0;
+              }
+              repsSum += reps;
+              // Poids total soulevé = reps * w (simpliste, 
+              // on part du principe qu'on soulève ce poids à chaque répétition)
+              weightSum += (reps * w);
+            }
+          }
+        }
+      }
+
+      totalRepsEl.textContent = repsSum;
+      totalWeightEl.textContent = weightSum + ' kg';
+      totalSessionsEl.textContent = sessionCount;
+
+      // Objectif : 5 séances par semaine, ~4 semaines dans un mois => 20 séances 
+      // On fait un prorata selon le nombre de jours ?
+      // ex : 5 séances/semaine => ~ (5/7) séances par jour => 5/7 * nb jours
+      const daysFactor = 5/7;
+      const target = Math.round(daysInMonth * daysFactor);
+
+      // Calcul de la progression
+      let progress = 0;
+      if(target > 0) progress = Math.round((sessionCount / target) * 100);
+      if(progress > 100) progress = 100;
+
+      monthlyProgressBar.style.width = progress + '%';
+    }
+
   </script>
 </body>
 </html>
