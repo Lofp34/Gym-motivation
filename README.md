@@ -1,4 +1,4 @@
-Voici un exemple de fichier README.md rédigé en français, qui décrit le projet, son objectif, son fonctionnement et la manière de le lancer et de l’utiliser. Vous pouvez bien sûr l’adapter à vos besoins et à votre style !
+Conversation Gemini de creation de l'appli: https://aistudio.google.com/u/1/prompts/10GC9dnCqJZvsvh-1EgwoVZdp35EQ7e4F
 
 MVP Sport – Tiny Habits & Behavior Design
 
