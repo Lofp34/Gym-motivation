@@ -1,0 +1,48 @@
+Améliorations de l’Interface
+Voici les nouvelles améliorations que je souhaite appliquer sur cette application:
+Utilisateur (UI/UX)
+1.1. Cartes Jour
+•	Dépliage des Cartes : Les cartes correspondant aux jours 1 à 5 doivent pouvoir se déplier de manière élégante. Lors de l’ouverture de l’application, les cartes devraient défiler avec des animations fluides pour une apparence plus esthétique et propre.
+•	Dépliage des Cartes de Session : Lors de l’exécution d’une session, la carte de la session en cours doit également se déplier pour afficher les détails pertinents.
+1.2. Présentation du Header
+•	Disposition du Header :
+•	Titre : Positionner le titre en haut du header.
+•	Temps de Repos et Chronomètre : Placer ces éléments directement en dessous du titre.
+•	Navigation : Aligner les trois écrans principaux (Réglages, Programme, Journal) horizontalement en dessous du chronomètre.
+1.3. Écrans de l’Application
+•	Ajout d’un Écran Réglages : En plus des écrans Programme et Journal, intégrer un écran Réglages permettant :
+•	De régler la durée des temps de repos.
+•	De sélectionner et personnaliser différents programmes d’entraînement.
+Fonctionnalités et Améliorations Fonctionnelles
+2.1. Gestion des Séries d’Exercice
+•	Ajout de Séries : Sur les cartes d’exercice, en plus des boutons 1 à 4 pour les séries, ajouter un cinquième bouton “+” permettant d’ajouter des séries supplémentaires facilement.
+•	Mémoire des Séries : Lors de l’enregistrement d’une série, mémoriser les données (nombre de répétitions et charge) afin que la série suivante puisse pré-remplir ces informations par défaut, facilitant ainsi une progression cohérente.
+2.2. Sélection des Poids
+•	Progression des Poids : Modifier la sélection des poids pour qu’entre 5 et 10 kg, la progression se fasse par incréments de 1 kg (5, 6, 7, 8, 9, 10 kg). Au-delà de 10 kg, maintenir la progression actuelle par incréments de 5 kg.
+2.3. Fonctionnement du Chronomètre
+•	Continuité du Chronomètre : Garantir que le chronomètre continue de fonctionner même lorsque l’application est en arrière-plan ou que le téléphone est en veille. Actuellement, le chronomètre s’arrête lorsque l’application est fermée ou que le téléphone est éteint, ce qui nécessite une correction.
+Améliorations du Journal et des Statistiques
+3.1. Détails du Jour dans le Journal
+•	Modification des Séries : Permettre la visualisation et la modification des séries enregistrées dans le détail de chaque jour, en assurant l’absence d’erreurs lors des modifications.
+3.2. Statistiques Hebdomadaires
+•	Ajout de Statistiques : Intégrer une section de statistiques hebdomadaires pour offrir une vue d’ensemble des performances et des progrès réalisés au cours de la semaine.
+Animations et Feedback Visuel
+4.1. Animation lors de l’Enregistrement d’une Série
+•	Feedback Positif : Chaque fois qu’une série est enregistrée, déclencher une animation festive (par exemple, des confettis ou des étoiles) pour encourager l’utilisateur.
+4.2. Animation de Célébration à la Fin d’une Séance
+•	Célébration Optimale : Lors de la conclusion d’une séance, afficher une animation de célébration immersive et motivante, maximisant le sentiment de satisfaction et de dopamine chez l’utilisateur.
+Résumé des Améliorations à Implémenter
+1.	Interface Utilisateur :
+•	Dépliage animé des cartes jour et session.
+•	Réorganisation du header avec titre en haut, suivi du temps de repos et du chronomètre, puis des écrans de navigation alignés horizontalement.
+2.	Fonctionnalités :
+•	Ajout d’un bouton “+” pour ajouter des séries supplémentaires.
+•	Mémorisation des séries précédentes pour pré-remplir les suivantes.
+•	Ajustement de la progression des poids entre 5 et 10 kg par incréments de 1 kg.
+•	Maintien du fonctionnement du chronomètre en arrière-plan et en veille.
+3.	Journal et Statistiques :
+•	Possibilité de visualiser et modifier les séries dans le détail quotidien sans erreurs.
+•	Intégration de statistiques hebdomadaires pour le suivi des performances.
+4.	Animations :
+•	Animation festive lors de l’enregistrement d’une série.
+•	Animation de célébration immersive à la fin d’une séance.
