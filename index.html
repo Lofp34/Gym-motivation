@@ -23,6 +23,7 @@
       --text-color-secondary: #72767D;  /* Gris moyen */
       --border-radius: 12px;
       --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --card-animation-duration: 0.5s;
     }
 
     body {
@@ -424,6 +425,172 @@
         width: 90%;
       }
     }
+
+    /* Styles pour les cartes dépliantes */
+    .day-cards-container {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .day-card {
+      background: var(--card-background);
+      border-radius: var(--border-radius);
+      margin-bottom: 16px;
+      box-shadow: var(--box-shadow);
+      transform-origin: top;
+      animation: cardEntrance var(--card-animation-duration) ease-out backwards;
+    }
+
+    .day-card:nth-child(1) { animation-delay: 0.1s; }
+    .day-card:nth-child(2) { animation-delay: 0.2s; }
+    .day-card:nth-child(3) { animation-delay: 0.3s; }
+    .day-card:nth-child(4) { animation-delay: 0.4s; }
+    .day-card:nth-child(5) { animation-delay: 0.5s; }
+
+    .day-card-header {
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: var(--border-radius);
+      transition: background-color 0.3s ease;
+    }
+
+    .day-card-header:hover {
+      background-color: rgba(88, 101, 242, 0.05);
+    }
+
+    .day-card-title {
+      font-weight: 600;
+      color: var(--primary-color);
+      margin: 0;
+    }
+
+    .day-card-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out;
+      padding: 0 16px;
+    }
+
+    .day-card.expanded .day-card-content {
+      max-height: 1000px;
+      padding-bottom: 16px;
+    }
+
+    .day-card-arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .day-card.expanded .day-card-arrow {
+      transform: rotate(180deg);
+    }
+
+    @keyframes cardEntrance {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Conteneur des cartes */
+    .day-cards-container {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* S'assurer que les cartes ne sont visibles que dans la page Programme */
+    #journalPage .day-cards-container {
+      display: none;
+    }
+
+    /* Styles pour le bouton de réinitialisation */
+    .reset-button {
+      display: block;
+      width: 20%;
+      padding: 8px;
+      margin-top: 15px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: #ff4757;
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .reset-button:hover {
+      background-color: #ff6b81;
+    }
+
+    /* Pop-up de confirmation */
+    .confirm-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .confirm-modal {
+      background: white;
+      padding: 20px;
+      border-radius: var(--border-radius);
+      width: 80%;
+      max-width: 300px;
+      text-align: center;
+    }
+
+    .confirm-modal h3 {
+      margin-top: 0;
+      color: #ff4757;
+    }
+
+    .confirm-modal p {
+      margin: 15px 0;
+      color: var(--text-color-secondary);
+    }
+
+    .confirm-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .confirm-button {
+      padding: 8px 20px;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+    }
+
+    .confirm-cancel {
+      background-color: #f1f2f6;
+      color: var(--text-color-secondary);
+    }
+
+    .confirm-reset {
+      background-color: #ff4757;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -447,310 +614,266 @@
   </header>
 
   <div class="container">
-
     <!-- PAGE PROGRAMME -->
     <div id="programmePage" class="page active">
-      <!-- Ici le code du programme (similaire à la version précédente) -->
-      <!-- Jour 1 -->
-      <div class="session-card" id="jour1">
-        <h2>Jour 1: Poitrine & Triceps</h2>
-        <div class="exercise-group">
-          <h3>Poitrine</h3>
-          <div class="exercise">
-            <span class="exercise-name">Développé couché</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="developpe-couche" data-set="1">1</button>
-              <button class="set-button" data-exercise="developpe-couche" data-set="2">2</button>
-              <button class="set-button" data-exercise="developpe-couche" data-set="3">3</button>
-              <button class="set-button" data-exercise="developpe-couche" data-set="4">4</button>
-            </div>
+      <div class="day-cards-container">
+        <div class="day-card">
+          <div class="day-card-header">
+            <h2 class="day-card-title">Jour 1 - Haut du Corps</h2>
+            <span class="day-card-arrow">▼</span>
           </div>
-          <div class="exercise">
-            <span class="exercise-name">Écartés avec haltères</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="ecartes-halteres" data-set="1">1</button>
-              <button class="set-button" data-exercise="ecartes-halteres" data-set="2">2</button>
-              <button class="set-button" data-exercise="ecartes-halteres" data-set="3">3</button>
-              <button class="set-button" data-exercise="ecartes-halteres" data-set="4">4</button>
+          <div class="day-card-content">
+            <div class="exercise-group">
+              <h3>Poitrine</h3>
+              <div class="exercise">
+                <span class="exercise-name">Développé couché</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="developpe-couche-j1" data-set="1">1</button>
+                  <button class="set-button" data-exercise="developpe-couche-j1" data-set="2">2</button>
+                  <button class="set-button" data-exercise="developpe-couche-j1" data-set="3">3</button>
+                  <button class="set-button" data-exercise="developpe-couche-j1" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Écartés avec haltères</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="ecartes-halteres-j1" data-set="1">1</button>
+                  <button class="set-button" data-exercise="ecartes-halteres-j1" data-set="2">2</button>
+                  <button class="set-button" data-exercise="ecartes-halteres-j1" data-set="3">3</button>
+                  <button class="set-button" data-exercise="ecartes-halteres-j1" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Pompes</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="pompes-j1" data-set="1">1</button>
+                  <button class="set-button" data-exercise="pompes-j1" data-set="2">2</button>
+                  <button class="set-button" data-exercise="pompes-j1" data-set="3">3</button>
+                  <button class="set-button" data-exercise="pompes-j1" data-set="4">4</button>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Pompes</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="pompes" data-set="1">1</button>
-              <button class="set-button" data-exercise="pompes" data-set="2">2</button>
-              <button class="set-button" data-exercise="pompes" data-set="3">3</button>
-              <button class="set-button" data-exercise="pompes" data-set="4">4</button>
+            <div class="exercise-group">
+              <h3>Triceps</h3>
+              <div class="exercise">
+                <span class="exercise-name">Dips sur banc</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="dips-banc-j1" data-set="1">1</button>
+                  <button class="set-button" data-exercise="dips-banc-j1" data-set="2">2</button>
+                  <button class="set-button" data-exercise="dips-banc-j1" data-set="3">3</button>
+                  <button class="set-button" data-exercise="dips-banc-j1" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Extension triceps à la poulie</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="extension-triceps-j1" data-set="1">1</button>
+                  <button class="set-button" data-exercise="extension-triceps-j1" data-set="2">2</button>
+                  <button class="set-button" data-exercise="extension-triceps-j1" data-set="3">3</button>
+                  <button class="set-button" data-exercise="extension-triceps-j1" data-set="4">4</button>
+                </div>
+              </div>
             </div>
+            <button class="reset-button" data-day="1">Réinitialiser Jour 1</button>
           </div>
         </div>
-        <div class="exercise-group">
-          <h3>Triceps</h3>
-          <div class="exercise">
-            <span class="exercise-name">Dips sur banc</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="dips-banc" data-set="1">1</button>
-              <button class="set-button" data-exercise="dips-banc" data-set="2">2</button>
-              <button class="set-button" data-exercise="dips-banc" data-set="3">3</button>
-              <button class="set-button" data-exercise="dips-banc" data-set="4">4</button>
-            </div>
+
+        <div class="day-card">
+          <div class="day-card-header">
+            <h2 class="day-card-title">Jour 2 - Bas du Corps</h2>
+            <span class="day-card-arrow">▼</span>
           </div>
-          <div class="exercise">
-            <span class="exercise-name">Extension triceps à la poulie</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="extension-triceps" data-set="1">1</button>
-              <button class="set-button" data-exercise="extension-triceps" data-set="2">2</button>
-              <button class="set-button" data-exercise="extension-triceps" data-set="3">3</button>
-              <button class="set-button" data-exercise="extension-triceps" data-set="4">4</button>
+          <div class="day-card-content">
+            <div class="exercise-group">
+              <h3>Jambes & Fessiers</h3>
+              <div class="exercise">
+                <span class="exercise-name">Squats</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="squats-j2" data-set="1">1</button>
+                  <button class="set-button" data-exercise="squats-j2" data-set="2">2</button>
+                  <button class="set-button" data-exercise="squats-j2" data-set="3">3</button>
+                  <button class="set-button" data-exercise="squats-j2" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Fentes marchées</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="fentes-j2" data-set="1">1</button>
+                  <button class="set-button" data-exercise="fentes-j2" data-set="2">2</button>
+                  <button class="set-button" data-exercise="fentes-j2" data-set="3">3</button>
+                  <button class="set-button" data-exercise="fentes-j2" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Extensions quadriceps</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="extensions-quad-j2" data-set="1">1</button>
+                  <button class="set-button" data-exercise="extensions-quad-j2" data-set="2">2</button>
+                  <button class="set-button" data-exercise="extensions-quad-j2" data-set="3">3</button>
+                  <button class="set-button" data-exercise="extensions-quad-j2" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Mollets debout</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="mollets-j2" data-set="1">1</button>
+                  <button class="set-button" data-exercise="mollets-j2" data-set="2">2</button>
+                  <button class="set-button" data-exercise="mollets-j2" data-set="3">3</button>
+                  <button class="set-button" data-exercise="mollets-j2" data-set="4">4</button>
+                </div>
+              </div>
             </div>
+            <button class="reset-button" data-day="2">Réinitialiser Jour 2</button>
           </div>
         </div>
-        <div class="session-progress">
-          Progression: <span id="progress-jour1">0%</span>
+
+        <div class="day-card">
+          <div class="day-card-header">
+            <h2 class="day-card-title">Jour 3 - Push</h2>
+            <span class="day-card-arrow">▼</span>
+          </div>
+          <div class="day-card-content">
+            <div class="exercise-group">
+              <h3>Push</h3>
+              <div class="exercise">
+                <span class="exercise-name">Développé militaire</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="dev-militaire-j3" data-set="1">1</button>
+                  <button class="set-button" data-exercise="dev-militaire-j3" data-set="2">2</button>
+                  <button class="set-button" data-exercise="dev-militaire-j3" data-set="3">3</button>
+                  <button class="set-button" data-exercise="dev-militaire-j3" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Dips</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="dips-j3" data-set="1">1</button>
+                  <button class="set-button" data-exercise="dips-j3" data-set="2">2</button>
+                  <button class="set-button" data-exercise="dips-j3" data-set="3">3</button>
+                  <button class="set-button" data-exercise="dips-j3" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Développé incliné</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="dev-incline-j3" data-set="1">1</button>
+                  <button class="set-button" data-exercise="dev-incline-j3" data-set="2">2</button>
+                  <button class="set-button" data-exercise="dev-incline-j3" data-set="3">3</button>
+                  <button class="set-button" data-exercise="dev-incline-j3" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Extensions triceps</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="extensions-triceps-j3" data-set="1">1</button>
+                  <button class="set-button" data-exercise="extensions-triceps-j3" data-set="2">2</button>
+                  <button class="set-button" data-exercise="extensions-triceps-j3" data-set="3">3</button>
+                  <button class="set-button" data-exercise="extensions-triceps-j3" data-set="4">4</button>
+                </div>
+              </div>
+            </div>
+            <button class="reset-button" data-day="3">Réinitialiser Jour 3</button>
+          </div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-card-header">
+            <h2 class="day-card-title">Jour 4 - Pull</h2>
+            <span class="day-card-arrow">▼</span>
+          </div>
+          <div class="day-card-content">
+            <div class="exercise-group">
+              <h3>Pull</h3>
+              <div class="exercise">
+                <span class="exercise-name">Tractions</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="tractions-j4" data-set="1">1</button>
+                  <button class="set-button" data-exercise="tractions-j4" data-set="2">2</button>
+                  <button class="set-button" data-exercise="tractions-j4" data-set="3">3</button>
+                  <button class="set-button" data-exercise="tractions-j4" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Rowing barre</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="rowing-barre-j4" data-set="1">1</button>
+                  <button class="set-button" data-exercise="rowing-barre-j4" data-set="2">2</button>
+                  <button class="set-button" data-exercise="rowing-barre-j4" data-set="3">3</button>
+                  <button class="set-button" data-exercise="rowing-barre-j4" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Face-pull</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="face-pull-j4" data-set="1">1</button>
+                  <button class="set-button" data-exercise="face-pull-j4" data-set="2">2</button>
+                  <button class="set-button" data-exercise="face-pull-j4" data-set="3">3</button>
+                  <button class="set-button" data-exercise="face-pull-j4" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Curl marteau</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="curl-marteau-j4" data-set="1">1</button>
+                  <button class="set-button" data-exercise="curl-marteau-j4" data-set="2">2</button>
+                  <button class="set-button" data-exercise="curl-marteau-j4" data-set="3">3</button>
+                  <button class="set-button" data-exercise="curl-marteau-j4" data-set="4">4</button>
+                </div>
+              </div>
+            </div>
+            <button class="reset-button" data-day="4">Réinitialiser Jour 4</button>
+          </div>
+        </div>
+
+        <div class="day-card">
+          <div class="day-card-header">
+            <h2 class="day-card-title">Jour 5 - Full Body</h2>
+            <span class="day-card-arrow">▼</span>
+          </div>
+          <div class="day-card-content">
+            <div class="exercise-group">
+              <h3>Full Body</h3>
+              <div class="exercise">
+                <span class="exercise-name">Deadlift</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="deadlift-j5" data-set="1">1</button>
+                  <button class="set-button" data-exercise="deadlift-j5" data-set="2">2</button>
+                  <button class="set-button" data-exercise="deadlift-j5" data-set="3">3</button>
+                  <button class="set-button" data-exercise="deadlift-j5" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Développé couché</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="dev-couche-j5" data-set="1">1</button>
+                  <button class="set-button" data-exercise="dev-couche-j5" data-set="2">2</button>
+                  <button class="set-button" data-exercise="dev-couche-j5" data-set="3">3</button>
+                  <button class="set-button" data-exercise="dev-couche-j5" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Rowing</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="rowing-j5" data-set="1">1</button>
+                  <button class="set-button" data-exercise="rowing-j5" data-set="2">2</button>
+                  <button class="set-button" data-exercise="rowing-j5" data-set="3">3</button>
+                  <button class="set-button" data-exercise="rowing-j5" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Squats</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="squats-j5" data-set="1">1</button>
+                  <button class="set-button" data-exercise="squats-j5" data-set="2">2</button>
+                  <button class="set-button" data-exercise="squats-j5" data-set="3">3</button>
+                  <button class="set-button" data-exercise="squats-j5" data-set="4">4</button>
+                </div>
+              </div>
+            </div>
+            <button class="reset-button" data-day="5">Réinitialiser Jour 5</button>
+          </div>
         </div>
       </div>
-
-      <!-- Jour 2 -->
-      <div class="session-card" id="jour2">
-        <h2>Jour 2: Dos & Biceps</h2>
-        <div class="exercise-group">
-          <h3>Dos</h3>
-          <div class="exercise">
-            <span class="exercise-name">Tirage vertical</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="tirage-vertical" data-set="1">1</button>
-              <button class="set-button" data-exercise="tirage-vertical" data-set="2">2</button>
-              <button class="set-button" data-exercise="tirage-vertical" data-set="3">3</button>
-              <button class="set-button" data-exercise="tirage-vertical" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Rowing barre / haltères</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="rowing" data-set="1">1</button>
-              <button class="set-button" data-exercise="rowing" data-set="2">2</button>
-              <button class="set-button" data-exercise="rowing" data-set="3">3</button>
-              <button class="set-button" data-exercise="rowing" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Tirage poulie basse</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="tirage-poulie-basse" data-set="1">1</button>
-              <button class="set-button" data-exercise="tirage-poulie-basse" data-set="2">2</button>
-              <button class="set-button" data-exercise="tirage-poulie-basse" data-set="3">3</button>
-              <button class="set-button" data-exercise="tirage-poulie-basse" data-set="4">4</button>
-            </div>
-          </div>
-        </div>
-        <div class="exercise-group">
-          <h3>Biceps</h3>
-          <div class="exercise">
-            <span class="exercise-name">Curl biceps</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="curl-biceps" data-set="1">1</button>
-              <button class="set-button" data-exercise="curl-biceps" data-set="2">2</button>
-              <button class="set-button" data-exercise="curl-biceps" data-set="3">3</button>
-              <button class="set-button" data-exercise="curl-biceps" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Curl marteau</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="curl-marteau" data-set="1">1</button>
-              <button class="set-button" data-exercise="curl-marteau" data-set="2">2</button>
-              <button class="set-button" data-exercise="curl-marteau" data-set="3">3</button>
-              <button class="set-button" data-exercise="curl-marteau" data-set="4">4</button>
-            </div>
-          </div>
-        </div>
-        <div class="session-progress">
-          Progression: <span id="progress-jour2">0%</span>
-        </div>
-      </div>
-
-      <!-- Jour 3 -->
-      <div class="session-card" id="jour3">
-        <h2>Jour 3: Jambes & Fessiers</h2>
-        <div class="exercise-group">
-          <h3>Jambes & Fessiers</h3>
-          <div class="exercise">
-            <span class="exercise-name">Squats</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="squats" data-set="1">1</button>
-              <button class="set-button" data-exercise="squats" data-set="2">2</button>
-              <button class="set-button" data-exercise="squats" data-set="3">3</button>
-              <button class="set-button" data-exercise="squats" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Fentes marchées</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="fentes-marchees" data-set="1">1</button>
-              <button class="set-button" data-exercise="fentes-marchees" data-set="2">2</button>
-              <button class="set-button" data-exercise="fentes-marchees" data-set="3">3</button>
-              <button class="set-button" data-exercise="fentes-marchees" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Presse à cuisses</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="presse-cuisses" data-set="1">1</button>
-              <button class="set-button" data-exercise="presse-cuisses" data-set="2">2</button>
-              <button class="set-button" data-exercise="presse-cuisses" data-set="3">3</button>
-              <button class="set-button" data-exercise="presse-cuisses" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Leg Curl</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="leg-curl" data-set="1">1</button>
-              <button class="set-button" data-exercise="leg-curl" data-set="2">2</button>
-              <button class="set-button" data-exercise="leg-curl" data-set="3">3</button>
-              <button class="set-button" data-exercise="leg-curl" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Hip Thrust / Ponts fessiers</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="hip-thrust" data-set="1">1</button>
-              <button class="set-button" data-exercise="hip-thrust" data-set="2">2</button>
-              <button class="set-button" data-exercise="hip-thrust" data-set="3">3</button>
-              <button class="set-button" data-exercise="hip-thrust" data-set="4">4</button>
-            </div>
-          </div>
-        </div>
-        <div class="session-progress">
-          Progression: <span id="progress-jour3">0%</span>
-        </div>
-      </div>
-
-      <!-- Jour 4 -->
-      <div class="session-card" id="jour4">
-        <h2>Jour 4: Épaules & Abdos</h2>
-        <div class="exercise-group">
-          <h3>Épaules</h3>
-          <div class="exercise">
-            <span class="exercise-name">Développé militaire</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="developpe-militaire" data-set="1">1</button>
-              <button class="set-button" data-exercise="developpe-militaire" data-set="2">2</button>
-              <button class="set-button" data-exercise="developpe-militaire" data-set="3">3</button>
-              <button class="set-button" data-exercise="developpe-militaire" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Élévations latérales</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="elevations-laterales" data-set="1">1</button>
-              <button class="set-button" data-exercise="elevations-laterales" data-set="2">2</button>
-              <button class="set-button" data-exercise="elevations-laterales" data-set="3">3</button>
-              <button class="set-button" data-exercise="elevations-laterales" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Élévations frontales</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="elevations-frontales" data-set="1">1</button>
-              <button class="set-button" data-exercise="elevations-frontales" data-set="2">2</button>
-              <button class="set-button" data-exercise="elevations-frontales" data-set="3">3</button>
-              <button class="set-button" data-exercise="elevations-frontales" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Oiseau inversé</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="oiseau-inverse" data-set="1">1</button>
-              <button class="set-button" data-exercise="oiseau-inverse" data-set="2">2</button>
-              <button class="set-button" data-exercise="oiseau-inverse" data-set="3">3</button>
-              <button class="set-button" data-exercise="oiseau-inverse" data-set="4">4</button>
-            </div>
-          </div>
-        </div>
-        <div class="exercise-group">
-          <h3>Abdos</h3>
-          <div class="exercise">
-            <span class="exercise-name">Planche</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="planche" data-set="1">1</button>
-              <button class="set-button" data-exercise="planche" data-set="2">2</button>
-              <button class="set-button" data-exercise="planche" data-set="3">3</button>
-              <button class="set-button" data-exercise="planche" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Crunchs / Relevés de buste</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="crunchs" data-set="1">1</button>
-              <button class="set-button" data-exercise="crunchs" data-set="2">2</button>
-              <button class="set-button" data-exercise="crunchs" data-set="3">3</button>
-              <button class="set-button" data-exercise="crunchs" data-set="4">4</button>
-            </div>
-          </div>
-        </div>
-        <div class="session-progress">
-          Progression: <span id="progress-jour4">0%</span>
-        </div>
-      </div>
-
-      <!-- Jour 5 -->
-      <div class="session-card" id="jour5">
-        <h2>Jour 5: Session « Rappel » ou Circuit Full Body</h2>
-        <p>Choisissez votre option pour cette session.</p>
-        <h3>Option Circuit Full Body</h3>
-        <div class="exercise-group">
-          <div class="exercise">
-            <span class="exercise-name">Burpees / Mountain Climbers</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="burpees" data-set="1">1</button>
-              <button class="set-button" data-exercise="burpees" data-set="2">2</button>
-              <button class="set-button" data-exercise="burpees" data-set="3">3</button>
-              <button class="set-button" data-exercise="burpees" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Kettlebell Swings</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="kettlebell-swings" data-set="1">1</button>
-              <button class="set-button" data-exercise="kettlebell-swings" data-set="2">2</button>
-              <button class="set-button" data-exercise="kettlebell-swings" data-set="3">3</button>
-              <button class="set-button" data-exercise="kettlebell-swings" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Pompes / Dips sur banc</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="pompes-circuit" data-set="1">1</button>
-              <button class="set-button" data-exercise="pompes-circuit" data-set="2">2</button>
-              <button class="set-button" data-exercise="pompes-circuit" data-set="3">3</button>
-              <button class="set-button" data-exercise="pompes-circuit" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Squats sautés</span>
-            <div class="set-controls">
-              <button class="set-button" data-exercise="squats-sautes" data-set="1">1</button>
-              <button class="set-button" data-exercise="squats-sautes" data-set="2">2</button>
-              <button class="set-button" data-exercise="squats-sautes" data-set="3">3</button>
-              <button class="set-button" data-exercise="squats-sautes" data-set="4">4</button>
-            </div>
-          </div>
-          <div class="exercise">
-            <span class="exercise-name">Planche latérale</span>
-            <div class="set-controls">
-              <!-- Par exemple G1/D1, G2/D2, etc. -->
-              <button class="set-button" data-exercise="planche-laterale-gauche" data-set="1">G1</button>
-              <button class="set-button" data-exercise="planche-laterale-droite" data-set="1">D1</button>
-              <button class="set-button" data-exercise="planche-laterale-gauche" data-set="2">G2</button>
-              <button class="set-button" data-exercise="planche-laterale-droite" data-set="2">D2</button>
-            </div>
-          </div>
-        </div>
-        <div class="session-progress">
-          Progression: <span id="progress-jour5">0%</span>
-        </div>
-      </div>
-
       <div class="feedback-message" id="feedback"></div>
     </div>
 
@@ -818,6 +941,18 @@
     </div>
   </div>
 
+  <!-- Modal de confirmation pour la réinitialisation -->
+  <div class="confirm-modal-overlay" id="confirmModalOverlay">
+    <div class="confirm-modal">
+      <h3>Réinitialiser la séance</h3>
+      <p>Êtes-vous sûr de vouloir réinitialiser cette séance ? Toutes les séries enregistrées seront effacées.</p>
+      <div class="confirm-buttons">
+        <button class="confirm-button confirm-cancel" id="confirmCancel">Annuler</button>
+        <button class="confirm-button confirm-reset" id="confirmReset">Réinitialiser</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     /*******************************************************
      * 1. GESTION DES SPINNERS POUR REPS ET POIDS
@@ -853,11 +988,11 @@
     const modal = document.getElementById('modal');
     const cancelModal = document.getElementById('cancelModal');
     const saveModal = document.getElementById('saveModal');
-    let currentButton = null; // Bouton sur lequel l’utilisateur a cliqué
+    let currentButton = null; // Bouton sur lequel l'utilisateur a cliqué
 
     function openModal(button) {
       currentButton = button;
-      // Charger d’éventuelles valeurs précédemment sauvegardées
+      // Charger d'éventuelles valeurs précédemment sauvegardées
       const exerciseKey = button.getAttribute('data-exercise');
       const setNumber = button.getAttribute('data-set');
       const dateKey = getCurrentDateKey();
@@ -894,9 +1029,13 @@
 
       // Marquer le bouton comme "completed"
       currentButton.classList.add('completed');
+      
       // Mettre à jour la progression de la session
-      const sessionId = currentButton.closest('.session-card').id;
-      updateSessionProgress(sessionId);
+      const dayCard = currentButton.closest('.day-card');
+      if (dayCard) {
+        updateDayCardProgress(dayCard);
+      }
+      
       showFeedback("Série enregistrée !");
       
       // Redémarrer le minuteur
@@ -908,6 +1047,26 @@
         generateCalendar(currentMonth, currentYear);
       }
     });
+
+    /*******************************************************
+     * NOUVELLE FONCTION : PROGRESSION DES CARTES DÉPLIANTES
+     *******************************************************/
+    function updateDayCardProgress(dayCard) {
+      const totalSets = dayCard.querySelectorAll('.set-button').length;
+      const completedSets = dayCard.querySelectorAll('.set-button.completed').length;
+      const progressPercent = Math.round((completedSets / totalSets) * 100);
+      
+      // Ajouter un élément de progression s'il n'existe pas déjà
+      let progressEl = dayCard.querySelector('.session-progress');
+      if (!progressEl) {
+        progressEl = document.createElement('div');
+        progressEl.className = 'session-progress';
+        progressEl.innerHTML = 'Progression: <span>0%</span>';
+        dayCard.querySelector('.day-card-content').appendChild(progressEl);
+      }
+      
+      progressEl.querySelector('span').textContent = `${progressPercent}%`;
+    }
 
     /*******************************************************
      * 3. GESTION DU LOCALSTORAGE
@@ -1033,6 +1192,7 @@
         const setNumber = btn.getAttribute('data-set');
         // On vérifie toutes les dates ? on part de l'hypothèse : 
         // "Complété" = déjà fait un jour = stats globales 
+        // Mais on va faire un check "jour en cours" pour rester cohérent.
         // Mais on va faire un check "jour en cours" pour rester cohérent.
         if(data[dateKey] && data[dateKey][exerciseName] && data[dateKey][exerciseName][setNumber]){
           btn.classList.add('completed');
@@ -1229,6 +1389,77 @@
 
       monthlyProgressBar.style.width = progress + '%';
     }
+
+    // Gestion des cartes dépliantes
+    document.querySelectorAll('.day-card-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const card = header.parentElement;
+        const wasExpanded = card.classList.contains('expanded');
+        
+        // Ferme toutes les cartes
+        document.querySelectorAll('.day-card').forEach(c => {
+          c.classList.remove('expanded');
+        });
+        
+        // Si la carte n'était pas déjà ouverte, l'ouvre
+        if (!wasExpanded) {
+          card.classList.add('expanded');
+        }
+      });
+    });
+
+    // Animation d'entrée des cartes au chargement
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.day-card').forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+      });
+    });
+
+    /*******************************************************
+     * GESTION DE LA RÉINITIALISATION DES SÉANCES
+     *******************************************************/
+    const confirmModalOverlay = document.getElementById('confirmModalOverlay');
+    const confirmCancel = document.getElementById('confirmCancel');
+    const confirmReset = document.getElementById('confirmReset');
+    let currentDayCard = null;
+
+    // Ajouter les écouteurs d'événements pour tous les boutons de réinitialisation
+    document.querySelectorAll('.reset-button').forEach(button => {
+      button.addEventListener('click', (e) => {
+        currentDayCard = e.target.closest('.day-card');
+        confirmModalOverlay.style.display = 'flex';
+      });
+    });
+
+    // Gérer l'annulation
+    confirmCancel.addEventListener('click', () => {
+      confirmModalOverlay.style.display = 'none';
+      currentDayCard = null;
+    });
+
+    // Gérer la réinitialisation
+    confirmReset.addEventListener('click', () => {
+      if (!currentDayCard) return;
+
+      // Récupérer tous les boutons de série de la carte
+      const setButtons = currentDayCard.querySelectorAll('.set-button');
+      
+      // Pour chaque bouton
+      setButtons.forEach(button => {
+        // Retirer la classe completed
+        button.classList.remove('completed');
+      });
+
+      // Mettre à jour la progression visuelle de la carte
+      updateDayCardProgress(currentDayCard);
+      
+      // Feedback
+      showFeedback("Séance réinitialisée !");
+      
+      // Fermer le modal
+      confirmModalOverlay.style.display = 'none';
+      currentDayCard = null;
+    });
 
   </script>
 </body>
