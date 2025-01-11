@@ -466,6 +466,18 @@
       font-weight: 600;
       color: var(--primary-color);
       margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .day-number {
+      font-size: 1.1rem;
+    }
+
+    .day-type {
+      font-size: 0.9rem;
+      color: var(--text-color-secondary);
     }
 
     .day-card-content {
@@ -514,7 +526,7 @@
     /* Styles pour le bouton de réinitialisation */
     .reset-button {
       display: block;
-      width: 20%;
+      width: 30%;
       padding: 8px;
       margin-top: 15px;
       margin-left: auto;
@@ -619,7 +631,10 @@
       <div class="day-cards-container">
         <div class="day-card">
           <div class="day-card-header">
-            <h2 class="day-card-title">Jour 1 - Haut du Corps</h2>
+            <h2 class="day-card-title">
+              <span class="day-number">Jour 1</span>
+              <span class="day-type">Haut du Corps</span>
+            </h2>
             <span class="day-card-arrow">▼</span>
           </div>
           <div class="day-card-content">
@@ -635,33 +650,33 @@
                 </div>
               </div>
               <div class="exercise">
-                <span class="exercise-name">Écartés avec haltères</span>
+                <span class="exercise-name">Développé incliné</span>
                 <div class="set-controls">
-                  <button class="set-button" data-exercise="ecartes-halteres-j1" data-set="1">1</button>
-                  <button class="set-button" data-exercise="ecartes-halteres-j1" data-set="2">2</button>
-                  <button class="set-button" data-exercise="ecartes-halteres-j1" data-set="3">3</button>
-                  <button class="set-button" data-exercise="ecartes-halteres-j1" data-set="4">4</button>
+                  <button class="set-button" data-exercise="developpe-incline-j1" data-set="1">1</button>
+                  <button class="set-button" data-exercise="developpe-incline-j1" data-set="2">2</button>
+                  <button class="set-button" data-exercise="developpe-incline-j1" data-set="3">3</button>
+                  <button class="set-button" data-exercise="developpe-incline-j1" data-set="4">4</button>
                 </div>
               </div>
               <div class="exercise">
-                <span class="exercise-name">Pompes</span>
+                <span class="exercise-name">Oiseau inversé</span>
                 <div class="set-controls">
-                  <button class="set-button" data-exercise="pompes-j1" data-set="1">1</button>
-                  <button class="set-button" data-exercise="pompes-j1" data-set="2">2</button>
-                  <button class="set-button" data-exercise="pompes-j1" data-set="3">3</button>
-                  <button class="set-button" data-exercise="pompes-j1" data-set="4">4</button>
+                  <button class="set-button" data-exercise="oiseau-inverse-j1" data-set="1">1</button>
+                  <button class="set-button" data-exercise="oiseau-inverse-j1" data-set="2">2</button>
+                  <button class="set-button" data-exercise="oiseau-inverse-j1" data-set="3">3</button>
+                  <button class="set-button" data-exercise="oiseau-inverse-j1" data-set="4">4</button>
                 </div>
               </div>
             </div>
             <div class="exercise-group">
               <h3>Triceps</h3>
               <div class="exercise">
-                <span class="exercise-name">Dips sur banc</span>
+                <span class="exercise-name">Extension triceps avec haltère</span>
                 <div class="set-controls">
-                  <button class="set-button" data-exercise="dips-banc-j1" data-set="1">1</button>
-                  <button class="set-button" data-exercise="dips-banc-j1" data-set="2">2</button>
-                  <button class="set-button" data-exercise="dips-banc-j1" data-set="3">3</button>
-                  <button class="set-button" data-exercise="dips-banc-j1" data-set="4">4</button>
+                  <button class="set-button" data-exercise="extension-triceps-haltere-j1" data-set="1">1</button>
+                  <button class="set-button" data-exercise="extension-triceps-haltere-j1" data-set="2">2</button>
+                  <button class="set-button" data-exercise="extension-triceps-haltere-j1" data-set="3">3</button>
+                  <button class="set-button" data-exercise="extension-triceps-haltere-j1" data-set="4">4</button>
                 </div>
               </div>
               <div class="exercise">
@@ -674,13 +689,16 @@
                 </div>
               </div>
             </div>
-            <button class="reset-button" data-day="1">Réinitialiser Jour 1</button>
+            <button class="reset-button">Réinitialiser</button>
           </div>
         </div>
 
         <div class="day-card">
           <div class="day-card-header">
-            <h2 class="day-card-title">Jour 2 - Bas du Corps</h2>
+            <h2 class="day-card-title">
+              <span class="day-number">Jour 2</span>
+              <span class="day-type">Bas du Corps</span>
+            </h2>
             <span class="day-card-arrow">▼</span>
           </div>
           <div class="day-card-content">
@@ -696,45 +714,48 @@
                 </div>
               </div>
               <div class="exercise">
-                <span class="exercise-name">Fentes marchées</span>
+                <span class="exercise-name">Presse</span>
                 <div class="set-controls">
-                  <button class="set-button" data-exercise="fentes-j2" data-set="1">1</button>
-                  <button class="set-button" data-exercise="fentes-j2" data-set="2">2</button>
-                  <button class="set-button" data-exercise="fentes-j2" data-set="3">3</button>
-                  <button class="set-button" data-exercise="fentes-j2" data-set="4">4</button>
+                  <button class="set-button" data-exercise="presse-j2" data-set="1">1</button>
+                  <button class="set-button" data-exercise="presse-j2" data-set="2">2</button>
+                  <button class="set-button" data-exercise="presse-j2" data-set="3">3</button>
+                  <button class="set-button" data-exercise="presse-j2" data-set="4">4</button>
                 </div>
               </div>
               <div class="exercise">
-                <span class="exercise-name">Extensions quadriceps</span>
+                <span class="exercise-name">Curl jambes allongé</span>
                 <div class="set-controls">
-                  <button class="set-button" data-exercise="extensions-quad-j2" data-set="1">1</button>
-                  <button class="set-button" data-exercise="extensions-quad-j2" data-set="2">2</button>
-                  <button class="set-button" data-exercise="extensions-quad-j2" data-set="3">3</button>
-                  <button class="set-button" data-exercise="extensions-quad-j2" data-set="4">4</button>
+                  <button class="set-button" data-exercise="curl-jambes-j2" data-set="1">1</button>
+                  <button class="set-button" data-exercise="curl-jambes-j2" data-set="2">2</button>
+                  <button class="set-button" data-exercise="curl-jambes-j2" data-set="3">3</button>
+                  <button class="set-button" data-exercise="curl-jambes-j2" data-set="4">4</button>
                 </div>
               </div>
               <div class="exercise">
-                <span class="exercise-name">Mollets debout</span>
+                <span class="exercise-name">Mollets assis</span>
                 <div class="set-controls">
-                  <button class="set-button" data-exercise="mollets-j2" data-set="1">1</button>
-                  <button class="set-button" data-exercise="mollets-j2" data-set="2">2</button>
-                  <button class="set-button" data-exercise="mollets-j2" data-set="3">3</button>
-                  <button class="set-button" data-exercise="mollets-j2" data-set="4">4</button>
+                  <button class="set-button" data-exercise="mollets-assis-j2" data-set="1">1</button>
+                  <button class="set-button" data-exercise="mollets-assis-j2" data-set="2">2</button>
+                  <button class="set-button" data-exercise="mollets-assis-j2" data-set="3">3</button>
+                  <button class="set-button" data-exercise="mollets-assis-j2" data-set="4">4</button>
                 </div>
               </div>
             </div>
-            <button class="reset-button" data-day="2">Réinitialiser Jour 2</button>
+            <button class="reset-button">Réinitialiser</button>
           </div>
         </div>
 
         <div class="day-card">
           <div class="day-card-header">
-            <h2 class="day-card-title">Jour 3 - Push</h2>
+            <h2 class="day-card-title">
+              <span class="day-number">Jour 3</span>
+              <span class="day-type">Push</span>
+            </h2>
             <span class="day-card-arrow">▼</span>
           </div>
           <div class="day-card-content">
             <div class="exercise-group">
-              <h3>Push</h3>
+              <h3>Épaules</h3>
               <div class="exercise">
                 <span class="exercise-name">Développé militaire</span>
                 <div class="set-controls">
@@ -745,52 +766,64 @@
                 </div>
               </div>
               <div class="exercise">
-                <span class="exercise-name">Dips</span>
+                <span class="exercise-name">Traction</span>
                 <div class="set-controls">
-                  <button class="set-button" data-exercise="dips-j3" data-set="1">1</button>
-                  <button class="set-button" data-exercise="dips-j3" data-set="2">2</button>
-                  <button class="set-button" data-exercise="dips-j3" data-set="3">3</button>
-                  <button class="set-button" data-exercise="dips-j3" data-set="4">4</button>
+                  <button class="set-button" data-exercise="traction-j3" data-set="1">1</button>
+                  <button class="set-button" data-exercise="traction-j3" data-set="2">2</button>
+                  <button class="set-button" data-exercise="traction-j3" data-set="3">3</button>
+                  <button class="set-button" data-exercise="traction-j3" data-set="4">4</button>
                 </div>
               </div>
               <div class="exercise">
-                <span class="exercise-name">Développé incliné</span>
+                <span class="exercise-name">Élévation latérale</span>
                 <div class="set-controls">
-                  <button class="set-button" data-exercise="dev-incline-j3" data-set="1">1</button>
-                  <button class="set-button" data-exercise="dev-incline-j3" data-set="2">2</button>
-                  <button class="set-button" data-exercise="dev-incline-j3" data-set="3">3</button>
-                  <button class="set-button" data-exercise="dev-incline-j3" data-set="4">4</button>
+                  <button class="set-button" data-exercise="elevation-laterale-j3" data-set="1">1</button>
+                  <button class="set-button" data-exercise="elevation-laterale-j3" data-set="2">2</button>
+                  <button class="set-button" data-exercise="elevation-laterale-j3" data-set="3">3</button>
+                  <button class="set-button" data-exercise="elevation-laterale-j3" data-set="4">4</button>
                 </div>
               </div>
               <div class="exercise">
-                <span class="exercise-name">Extensions triceps</span>
+                <span class="exercise-name">Élévation frontale</span>
                 <div class="set-controls">
-                  <button class="set-button" data-exercise="extensions-triceps-j3" data-set="1">1</button>
-                  <button class="set-button" data-exercise="extensions-triceps-j3" data-set="2">2</button>
-                  <button class="set-button" data-exercise="extensions-triceps-j3" data-set="3">3</button>
-                  <button class="set-button" data-exercise="extensions-triceps-j3" data-set="4">4</button>
+                  <button class="set-button" data-exercise="elevation-frontale-j3" data-set="1">1</button>
+                  <button class="set-button" data-exercise="elevation-frontale-j3" data-set="2">2</button>
+                  <button class="set-button" data-exercise="elevation-frontale-j3" data-set="3">3</button>
+                  <button class="set-button" data-exercise="elevation-frontale-j3" data-set="4">4</button>
                 </div>
               </div>
             </div>
-            <button class="reset-button" data-day="3">Réinitialiser Jour 3</button>
+            <button class="reset-button">Réinitialiser</button>
           </div>
         </div>
 
         <div class="day-card">
           <div class="day-card-header">
-            <h2 class="day-card-title">Jour 4 - Pull</h2>
+            <h2 class="day-card-title">
+              <span class="day-number">Jour 4</span>
+              <span class="day-type">Pull</span>
+            </h2>
             <span class="day-card-arrow">▼</span>
           </div>
           <div class="day-card-content">
             <div class="exercise-group">
-              <h3>Pull</h3>
+              <h3>Dos</h3>
               <div class="exercise">
-                <span class="exercise-name">Tractions</span>
+                <span class="exercise-name">Tirage vertical</span>
                 <div class="set-controls">
-                  <button class="set-button" data-exercise="tractions-j4" data-set="1">1</button>
-                  <button class="set-button" data-exercise="tractions-j4" data-set="2">2</button>
-                  <button class="set-button" data-exercise="tractions-j4" data-set="3">3</button>
-                  <button class="set-button" data-exercise="tractions-j4" data-set="4">4</button>
+                  <button class="set-button" data-exercise="tirage-vertical-j4" data-set="1">1</button>
+                  <button class="set-button" data-exercise="tirage-vertical-j4" data-set="2">2</button>
+                  <button class="set-button" data-exercise="tirage-vertical-j4" data-set="3">3</button>
+                  <button class="set-button" data-exercise="tirage-vertical-j4" data-set="4">4</button>
+                </div>
+              </div>
+              <div class="exercise">
+                <span class="exercise-name">Tirage horizontal</span>
+                <div class="set-controls">
+                  <button class="set-button" data-exercise="tirage-horizontal-j4" data-set="1">1</button>
+                  <button class="set-button" data-exercise="tirage-horizontal-j4" data-set="2">2</button>
+                  <button class="set-button" data-exercise="tirage-horizontal-j4" data-set="3">3</button>
+                  <button class="set-button" data-exercise="tirage-horizontal-j4" data-set="4">4</button>
                 </div>
               </div>
               <div class="exercise">
@@ -803,31 +836,25 @@
                 </div>
               </div>
               <div class="exercise">
-                <span class="exercise-name">Face-pull</span>
+                <span class="exercise-name">Pullover machine</span>
                 <div class="set-controls">
-                  <button class="set-button" data-exercise="face-pull-j4" data-set="1">1</button>
-                  <button class="set-button" data-exercise="face-pull-j4" data-set="2">2</button>
-                  <button class="set-button" data-exercise="face-pull-j4" data-set="3">3</button>
-                  <button class="set-button" data-exercise="face-pull-j4" data-set="4">4</button>
-                </div>
-              </div>
-              <div class="exercise">
-                <span class="exercise-name">Curl marteau</span>
-                <div class="set-controls">
-                  <button class="set-button" data-exercise="curl-marteau-j4" data-set="1">1</button>
-                  <button class="set-button" data-exercise="curl-marteau-j4" data-set="2">2</button>
-                  <button class="set-button" data-exercise="curl-marteau-j4" data-set="3">3</button>
-                  <button class="set-button" data-exercise="curl-marteau-j4" data-set="4">4</button>
+                  <button class="set-button" data-exercise="pullover-machine-j4" data-set="1">1</button>
+                  <button class="set-button" data-exercise="pullover-machine-j4" data-set="2">2</button>
+                  <button class="set-button" data-exercise="pullover-machine-j4" data-set="3">3</button>
+                  <button class="set-button" data-exercise="pullover-machine-j4" data-set="4">4</button>
                 </div>
               </div>
             </div>
-            <button class="reset-button" data-day="4">Réinitialiser Jour 4</button>
+            <button class="reset-button">Réinitialiser</button>
           </div>
         </div>
 
         <div class="day-card">
           <div class="day-card-header">
-            <h2 class="day-card-title">Jour 5 - Full Body</h2>
+            <h2 class="day-card-title">
+              <span class="day-number">Jour 5</span>
+              <span class="day-type">Full Body</span>
+            </h2>
             <span class="day-card-arrow">▼</span>
           </div>
           <div class="day-card-content">
@@ -870,7 +897,7 @@
                 </div>
               </div>
             </div>
-            <button class="reset-button" data-day="5">Réinitialiser Jour 5</button>
+            <button class="reset-button">Réinitialiser</button>
           </div>
         </div>
       </div>
