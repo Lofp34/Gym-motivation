@@ -724,6 +724,51 @@
       align-items: center;
       margin-top: 15px;
     }
+
+    /* Styles pour les boutons de la nouvelle séance */
+    .new-session-template .template-buttons {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 15px;
+      gap: 10px;
+    }
+
+    .new-session-template .save-session-btn {
+      width: 30%;
+      padding: 8px;
+      background-color: var(--secondary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .new-session-template .cancel-session-btn {
+      width: 30%;
+      padding: 8px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .new-session-template .save-session-btn:hover {
+      background-color: var(--primary-color);
+    }
+
+    .new-session-template .cancel-session-btn:hover {
+      background-color: #5a6268;
+    }
   </style>
 </head>
 <body>
@@ -810,7 +855,10 @@
                 </div>
               </div>
             </div>
-            <button class="reset-button">Réinitialiser</button>
+            <div class="card-buttons">
+              <button class="delete-button">Supprimer</button>
+              <button class="reset-button">Réinitialiser</button>
+            </div>
           </div>
         </div>
 
@@ -862,7 +910,10 @@
                 </div>
               </div>
             </div>
-            <button class="reset-button">Réinitialiser</button>
+            <div class="card-buttons">
+              <button class="delete-button">Supprimer</button>
+              <button class="reset-button">Réinitialiser</button>
+            </div>
           </div>
         </div>
 
@@ -914,7 +965,10 @@
                 </div>
               </div>
             </div>
-            <button class="reset-button">Réinitialiser</button>
+            <div class="card-buttons">
+              <button class="delete-button">Supprimer</button>
+              <button class="reset-button">Réinitialiser</button>
+            </div>
           </div>
         </div>
 
@@ -966,7 +1020,10 @@
                 </div>
               </div>
             </div>
-            <button class="reset-button">Réinitialiser</button>
+            <div class="card-buttons">
+              <button class="delete-button">Supprimer</button>
+              <button class="reset-button">Réinitialiser</button>
+            </div>
           </div>
         </div>
 
@@ -1018,7 +1075,10 @@
                 </div>
               </div>
             </div>
-            <button class="reset-button">Réinitialiser</button>
+            <div class="card-buttons">
+              <button class="delete-button">Supprimer</button>
+              <button class="reset-button">Réinitialiser</button>
+            </div>
           </div>
         </div>
 
@@ -1040,7 +1100,10 @@
             <div class="exercise-groups-container">
               <!-- Les groupes d'exercices seront ajoutés ici dynamiquement -->
             </div>
-            <button class="save-session-btn" style="display: none;">Enregistrer la séance</button>
+            <div class="template-buttons">
+              <button class="cancel-session-btn">Annuler</button>
+              <button class="save-session-btn">Enregistrer la séance</button>
+            </div>
           </div>
         </div>
 
@@ -1660,6 +1723,7 @@
     const addExerciseGroupBtn = newSessionTemplate.querySelector('.add-exercise-group-btn');
     const exerciseGroupsContainer = newSessionTemplate.querySelector('.exercise-groups-container');
     const saveSessionBtn = newSessionTemplate.querySelector('.save-session-btn');
+    const cancelSessionBtn = newSessionTemplate.querySelector('.cancel-session-btn');
 
     // Quand on clique sur le header de la nouvelle séance
     newSessionTemplate.querySelector('.day-card-header').addEventListener('click', function() {
@@ -1673,46 +1737,21 @@
       typeSpan.style.display = 'none';
       titleInput.style.display = 'block';
       typeInput.style.display = 'block';
-      saveSessionBtn.style.display = 'block';
       
       // Déplier la carte
       newSessionTemplate.classList.add('expanded');
     });
 
-    // Ajouter un nouveau groupe d'exercices
-    addExerciseGroupBtn.addEventListener('click', function() {
-      const groupTemplate = document.createElement('div');
-      groupTemplate.className = 'exercise-group-template';
-      groupTemplate.innerHTML = `
-        <div class="exercise-group-header">
-          <input type="text" class="exercise-group-name" placeholder="Nom du groupe (ex: Poitrine, Dos...)">
-          <button class="add-exercise-btn">+ Exercice</button>
-        </div>
-        <div class="exercises-list"></div>
-      `;
-
-      // Ajouter un exercice au groupe
-      groupTemplate.querySelector('.add-exercise-btn').addEventListener('click', function() {
-        const exerciseItem = document.createElement('div');
-        exerciseItem.className = 'exercise-item';
-        exerciseItem.innerHTML = `
-          <input type="text" class="exercise-name-input" placeholder="Nom de l'exercice">
-          <button class="remove-btn">×</button>
-        `;
-
-        // Supprimer l'exercice
-        exerciseItem.querySelector('.remove-btn').addEventListener('click', function() {
-          exerciseItem.remove();
-        });
-
-        groupTemplate.querySelector('.exercises-list').appendChild(exerciseItem);
-      });
-
-      exerciseGroupsContainer.appendChild(groupTemplate);
+    // Annuler la création de la séance
+    cancelSessionBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      resetNewSessionTemplate();
+      showFeedback("Création de séance annulée");
     });
 
     // Sauvegarder la nouvelle séance
-    saveSessionBtn.addEventListener('click', function() {
+    saveSessionBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
       const title = sessionTitleInput.value.trim();
       const type = sessionTypeInput.value.trim();
       
@@ -1734,6 +1773,151 @@
       resetNewSessionTemplate();
       
       showFeedback("Nouvelle séance créée avec succès !");
+    });
+
+    function resetNewSessionTemplate() {
+      sessionTitleInput.value = '';
+      sessionTypeInput.value = '';
+      sessionTitleInput.style.display = 'none';
+      sessionTypeInput.style.display = 'none';
+      newSessionTemplate.querySelector('.day-number').style.display = 'block';
+      newSessionTemplate.querySelector('.day-type').style.display = 'block';
+      exerciseGroupsContainer.innerHTML = '';
+      newSessionTemplate.classList.remove('expanded');
+    }
+
+    /*******************************************************
+     * GESTION DES CARTES PERSONNALISÉES
+     *******************************************************/
+    function saveCustomCards() {
+      const customCards = [];
+      document.querySelectorAll('.day-card:not(.new-session-template)').forEach((card, index) => {
+        if (index >= 5) { // On ne sauvegarde que les cartes personnalisées (après les 5 premières)
+          const title = card.querySelector('.day-number').textContent;
+          const type = card.querySelector('.day-type').textContent;
+          const groups = [];
+          
+          card.querySelectorAll('.exercise-group').forEach(group => {
+            const groupName = group.querySelector('h3').textContent;
+            const exercises = [];
+            
+            group.querySelectorAll('.exercise').forEach(exercise => {
+              exercises.push({
+                name: exercise.querySelector('.exercise-name').textContent,
+                id: exercise.querySelector('.set-button').getAttribute('data-exercise')
+              });
+            });
+            
+            groups.push({
+              name: groupName,
+              exercises: exercises
+            });
+          });
+          
+          customCards.push({
+            title: title,
+            type: type,
+            groups: groups
+          });
+        }
+      });
+      
+      localStorage.setItem('customCards', JSON.stringify(customCards));
+    }
+
+    function loadCustomCards() {
+      const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+      customCards.forEach(cardData => {
+        const card = createNewSessionCard(cardData.title, cardData.type, cardData.groups);
+        newSessionTemplate.parentNode.insertBefore(card, newSessionTemplate);
+      });
+    }
+
+    // Charger les cartes personnalisées au démarrage
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCustomCards();
+      // ... rest of the existing DOMContentLoaded code ...
+    });
+
+    /*******************************************************
+     * GESTION DES CARTES PERSONNALISÉES ET PRÉDÉFINIES
+     *******************************************************/
+    function saveCardsState() {
+      const cardsState = {};
+      document.querySelectorAll('.day-card:not(.new-session-template)').forEach((card) => {
+        const title = card.querySelector('.day-number').textContent;
+        cardsState[title] = {
+          type: card.querySelector('.day-type').textContent,
+          isVisible: card.style.display !== 'none'
+        };
+      });
+      localStorage.setItem('cardsState', JSON.stringify(cardsState));
+    }
+
+    function loadCardsState() {
+      const cardsState = JSON.parse(localStorage.getItem('cardsState') || '{}');
+      document.querySelectorAll('.day-card:not(.new-session-template)').forEach((card) => {
+        const title = card.querySelector('.day-number').textContent;
+        if (cardsState[title] !== undefined) {
+          card.style.display = cardsState[title].isVisible ? '' : 'none';
+        }
+      });
+    }
+
+    // Initialiser les événements de suppression pour toutes les cartes
+    document.querySelectorAll('.delete-button').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = e.target.closest('.day-card');
+        const title = card.querySelector('.day-number').textContent;
+        if (confirm(`Êtes-vous sûr de vouloir supprimer la séance "${title}" ?`)) {
+          card.style.display = 'none';
+          saveCardsState();
+          showFeedback(`Séance "${title}" supprimée !`);
+        }
+      });
+    });
+
+    // Charger l'état des cartes au démarrage
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCardsState();
+      loadCustomCards();
+      // ... rest of the existing DOMContentLoaded code ...
+    });
+
+    // Ajouter un nouveau groupe d'exercices
+    addExerciseGroupBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const groupTemplate = document.createElement('div');
+      groupTemplate.className = 'exercise-group-template';
+      groupTemplate.innerHTML = `
+        <div class="exercise-group-header">
+          <input type="text" class="exercise-group-name" placeholder="Nom du groupe (ex: Poitrine, Dos...)">
+          <button class="add-exercise-btn">+ Exercice</button>
+        </div>
+        <div class="exercises-list"></div>
+      `;
+
+      // Ajouter un exercice au groupe
+      groupTemplate.querySelector('.add-exercise-btn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        const exerciseItem = document.createElement('div');
+        exerciseItem.className = 'exercise-item';
+        exerciseItem.innerHTML = `
+          <input type="text" class="exercise-name-input" placeholder="Nom de l'exercice">
+          <button class="remove-btn">×</button>
+        `;
+
+        // Supprimer l'exercice
+        exerciseItem.querySelector('.remove-btn').addEventListener('click', function(e) {
+          e.stopPropagation();
+          exerciseItem.remove();
+        });
+
+        groupTemplate.querySelector('.exercises-list').appendChild(exerciseItem);
+      });
+
+      exerciseGroupsContainer.appendChild(groupTemplate);
     });
 
     function createNewSessionCard(title, type, groups = null) {
@@ -1851,7 +2035,8 @@
 
       // Ajouter les événements pour les boutons de série
       card.querySelectorAll('.set-button').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(e) {
+          e.stopPropagation();
           openModal(this);
         });
       });
@@ -1860,76 +2045,12 @@
       const resetButton = card.querySelector('.reset-button');
       if (resetButton) {
         resetButton.addEventListener('click', (e) => {
+          e.stopPropagation();
           currentDayCard = e.target.closest('.day-card');
           confirmModalOverlay.style.display = 'flex';
         });
       }
     }
-
-    function resetNewSessionTemplate() {
-      sessionTitleInput.value = '';
-      sessionTypeInput.value = '';
-      sessionTitleInput.style.display = 'none';
-      sessionTypeInput.style.display = 'none';
-      newSessionTemplate.querySelector('.day-number').style.display = 'block';
-      newSessionTemplate.querySelector('.day-type').style.display = 'block';
-      exerciseGroupsContainer.innerHTML = '';
-      saveSessionBtn.style.display = 'none';
-      newSessionTemplate.classList.remove('expanded');
-    }
-
-    /*******************************************************
-     * GESTION DES CARTES PERSONNALISÉES
-     *******************************************************/
-    function saveCustomCards() {
-      const customCards = [];
-      document.querySelectorAll('.day-card:not(.new-session-template)').forEach((card, index) => {
-        if (index >= 5) { // On ne sauvegarde que les cartes personnalisées (après les 5 premières)
-          const title = card.querySelector('.day-number').textContent;
-          const type = card.querySelector('.day-type').textContent;
-          const groups = [];
-          
-          card.querySelectorAll('.exercise-group').forEach(group => {
-            const groupName = group.querySelector('h3').textContent;
-            const exercises = [];
-            
-            group.querySelectorAll('.exercise').forEach(exercise => {
-              exercises.push({
-                name: exercise.querySelector('.exercise-name').textContent,
-                id: exercise.querySelector('.set-button').getAttribute('data-exercise')
-              });
-            });
-            
-            groups.push({
-              name: groupName,
-              exercises: exercises
-            });
-          });
-          
-          customCards.push({
-            title: title,
-            type: type,
-            groups: groups
-          });
-        }
-      });
-      
-      localStorage.setItem('customCards', JSON.stringify(customCards));
-    }
-
-    function loadCustomCards() {
-      const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
-      customCards.forEach(cardData => {
-        const card = createNewSessionCard(cardData.title, cardData.type, cardData.groups);
-        newSessionTemplate.parentNode.insertBefore(card, newSessionTemplate);
-      });
-    }
-
-    // Charger les cartes personnalisées au démarrage
-    document.addEventListener('DOMContentLoaded', () => {
-      loadCustomCards();
-      // ... rest of the existing DOMContentLoaded code ...
-    });
 
   </script>
 </body>
