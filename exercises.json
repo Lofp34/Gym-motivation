@@ -1,0 +1,47 @@
+{
+  "exercises": [
+    {"zoneCible": "Pectoraux", "nomExercice": "Développé couché", "typeExercice": "Poids libres", "materiel": "Barre", "musclesCibles": ["Grand pectoral", "Triceps brachial", "Deltoïde antérieur"]},
+    {"zoneCible": "Pectoraux", "nomExercice": "Développé incliné aux haltères", "typeExercice": "Poids libres", "materiel": "Haltères", "musclesCibles": ["Haut des pectoraux", "Triceps brachial", "Deltoïde antérieur"]},
+    {"zoneCible": "Pectoraux", "nomExercice": "Pec Deck (Butterfly)", "typeExercice": "Machine", "materiel": "Machine Pec Deck", "musclesCibles": ["Grand pectoral", "Deltoïde antérieur"]},
+    {"zoneCible": "Pectoraux", "nomExercice": "Pompes (Push-ups)", "typeExercice": "Poids du corps", "materiel": "Aucun", "musclesCibles": ["Grand pectoral", "Triceps brachial", "Deltoïde antérieur"]},
+
+    {"zoneCible": "Dos", "nomExercice": "Tractions à la barre fixe", "typeExercice": "Poids du corps", "materiel": "Barre de traction", "musclesCibles": ["Grand dorsal", "Biceps brachial", "Épaule et avant-bras"]},
+    {"zoneCible": "Dos", "nomExercice": "Tirage vertical (Lat Pulldown)", "typeExercice": "Machine", "materiel": "Poulie haute", "musclesCibles": ["Grand dorsal", "Biceps brachial"]},
+    {"zoneCible": "Dos", "nomExercice": "Rowing barre penché", "typeExercice": "Poids libres", "materiel": "Barre", "musclesCibles": ["Grand dorsal", "Trapèzes", "Biceps brachial"]},
+    {"zoneCible": "Dos", "nomExercice": "Tirage horizontal assis", "typeExercice": "Câbles", "materiel": "Poulie basse", "musclesCibles": ["Grand dorsal", "Trapèzes", "Biceps brachial"]},
+
+    {"zoneCible": "Épaules", "nomExercice": "Développé épaules (military press)", "typeExercice": "Poids libres", "materiel": "Barre ou haltères", "musclesCibles": ["Deltoïde antérieur", "Deltoïde moyen", "Triceps brachial"]},
+    {"zoneCible": "Épaules", "nomExercice": "Élévations latérales", "typeExercice": "Poids libres", "materiel": "Haltères", "musclesCibles": ["Deltoïde moyen", "Trapèzes"]},
+    {"zoneCible": "Épaules", "nomExercice": "Oiseau (rear delts fly)", "typeExercice": "Poids libres", "materiel": "Haltères", "musclesCibles": ["Deltoïde postérieur", "Trapèzes"]},
+    {"zoneCible": "Épaules", "nomExercice": "Développé épaules à la machine", "typeExercice": "Machine", "materiel": "Machine à épaules", "musclesCibles": ["Deltoïde antérieur", "Deltoïde moyen"]},
+
+    {"zoneCible": "Biceps", "nomExercice": "Curl barre", "typeExercice": "Poids libres", "materiel": "Barre", "musclesCibles": ["Biceps brachial", "Brachial"]},
+    {"zoneCible": "Biceps", "nomExercice": "Curl haltères alternés", "typeExercice": "Poids libres", "materiel": "Haltères", "musclesCibles": ["Biceps brachial", "Brachial"]},
+    {"zoneCible": "Biceps", "nomExercice": "Curl à la poulie basse", "typeExercice": "Câbles", "materiel": "Poulie basse", "musclesCibles": ["Biceps brachial", "Brachial"]},
+
+    {"zoneCible": "Triceps", "nomExercice": "Barre au front (Skull Crushers)", "typeExercice": "Poids libres", "materiel": "Barre EZ", "musclesCibles": ["Triceps brachial"]},
+    {"zoneCible": "Triceps", "nomExercice": "Extension poulie haute", "typeExercice": "Câbles", "materiel": "Poulie haute avec corde ou barre", "musclesCibles": ["Triceps brachial"]},
+    {"zoneCible": "Triceps", "nomExercice": "Dips banc ou parallèles", "typeExercice": "Poids du corps", "materiel": "Barres parallèles ou banc", "musclesCibles": ["Triceps brachial", "Pectoraux"]},
+
+    {"zoneCible": "Jambes", "nomExercice": "Squat", "typeExercice": "Poids libres", "materiel": "Barre", "musclesCibles": ["Quadriceps", "Fessiers", "Ischio-jambiers"]},
+    {"zoneCible": "Jambes", "nomExercice": "Leg Press", "typeExercice": "Machine", "materiel": "Presse à cuisses", "musclesCibles": ["Quadriceps", "Fessiers"]},
+    {"zoneCible": "Jambes", "nomExercice": "Fentes avant (Lunges)", "typeExercice": "Poids libres", "materiel": "Haltères ou barre", "musclesCibles": ["Quadriceps", "Fessiers", "Ischio-jambiers"]},
+    {"zoneCible": "Jambes", "nomExercice": "Leg Curl allongé", "typeExercice": "Machine", "materiel": "Machine Leg Curl", "musclesCibles": ["Ischio-jambiers"]},
+    {"zoneCible": "Jambes", "nomExercice": "Mollets debout", "typeExercice": "Poids libres", "materiel": "Barre ou haltères (optionnel)", "musclesCibles": ["Gastrocnémien", "Soléaire"]},
+
+    {"zoneCible": "Abdominaux", "nomExercice": "Crunch au sol", "typeExercice": "Poids du corps", "materiel": "Tapis (optionnel)", "musclesCibles": ["Grand droit de l'abdomen"]},
+    {"zoneCible": "Abdominaux", "nomExercice": "Relevé de jambes suspendu", "typeExercice": "Poids du corps", "materiel": "Barre de traction ou espaliers", "musclesCibles": ["Grand droit de l'abdomen", "Fléchisseurs de la hanche"]},
+    {"zoneCible": "Abdominaux", "nomExercice": "Crunch à la poulie haute", "typeExercice": "Câbles", "materiel": "Poulie haute avec corde", "musclesCibles": ["Grand droit de l'abdomen", "Obliques"]}
+  ],
+  "typeSeances": [
+    "Haut du Corps",
+    "Bas du Corps",
+    "Full Body",
+    "Push",
+    "Pull",
+    "Pectoraux/Triceps",
+    "Dos/Biceps",
+    "Épaules/Abdominaux",
+    "Jambes"
+  ]
+} 
