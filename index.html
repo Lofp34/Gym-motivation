@@ -694,6 +694,36 @@
       border-radius: 4px;
       cursor: pointer;
     }
+
+    /* Styles pour le bouton de suppression */
+    .delete-button {
+      display: block;
+      width: 30%;
+      padding: 8px;
+      margin-top: 15px;
+      margin-left: auto;
+      margin-right: 10px;
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .delete-button:hover {
+      background-color: #c82333;
+    }
+
+    .card-buttons {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin-top: 15px;
+    }
   </style>
 </head>
 <body>
@@ -1697,15 +1727,43 @@
       // Insérer la nouvelle carte avant la carte template
       newSessionTemplate.parentNode.insertBefore(newCard, newSessionTemplate);
       
+      // Sauvegarder toutes les cartes personnalisées
+      saveCustomCards();
+      
       // Réinitialiser le template
       resetNewSessionTemplate();
       
       showFeedback("Nouvelle séance créée avec succès !");
     });
 
-    function createNewSessionCard(title, type) {
+    function createNewSessionCard(title, type, groups = null) {
       const newCard = document.createElement('div');
       newCard.className = 'day-card';
+      
+      let groupsHtml = '';
+      if (groups) {
+        groups.forEach(group => {
+          groupsHtml += `
+            <div class="exercise-group">
+              <h3>${group.name}</h3>
+              ${group.exercises.map(exercise => `
+                <div class="exercise">
+                  <span class="exercise-name">${exercise.name}</span>
+                  <div class="set-controls">
+                    <button class="set-button" data-exercise="${exercise.id}" data-set="1">1</button>
+                    <button class="set-button" data-exercise="${exercise.id}" data-set="2">2</button>
+                    <button class="set-button" data-exercise="${exercise.id}" data-set="3">3</button>
+                    <button class="set-button" data-exercise="${exercise.id}" data-set="4">4</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        });
+      } else {
+        groupsHtml = generateExerciseGroupsHTML();
+      }
+
       newCard.innerHTML = `
         <div class="day-card-header">
           <h2 class="day-card-title">
@@ -1715,14 +1773,28 @@
           <span class="day-card-arrow">▼</span>
         </div>
         <div class="day-card-content">
-          ${generateExerciseGroupsHTML()}
-          <button class="reset-button">Réinitialiser</button>
+          ${groupsHtml}
+          <div class="card-buttons">
+            <button class="delete-button">Supprimer</button>
+            <button class="reset-button">Réinitialiser</button>
+          </div>
         </div>
       `;
 
-      // Ajouter les événements nécessaires
+      // Ajouter les événements
       addCardEventListeners(newCard);
       
+      // Ajouter l'événement de suppression
+      const deleteButton = newCard.querySelector('.delete-button');
+      deleteButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm('Êtes-vous sûr de vouloir supprimer cette séance ?')) {
+          newCard.remove();
+          saveCustomCards();
+          showFeedback("Séance supprimée !");
+        }
+      });
+
       return newCard;
     }
 
@@ -1805,6 +1877,59 @@
       saveSessionBtn.style.display = 'none';
       newSessionTemplate.classList.remove('expanded');
     }
+
+    /*******************************************************
+     * GESTION DES CARTES PERSONNALISÉES
+     *******************************************************/
+    function saveCustomCards() {
+      const customCards = [];
+      document.querySelectorAll('.day-card:not(.new-session-template)').forEach((card, index) => {
+        if (index >= 5) { // On ne sauvegarde que les cartes personnalisées (après les 5 premières)
+          const title = card.querySelector('.day-number').textContent;
+          const type = card.querySelector('.day-type').textContent;
+          const groups = [];
+          
+          card.querySelectorAll('.exercise-group').forEach(group => {
+            const groupName = group.querySelector('h3').textContent;
+            const exercises = [];
+            
+            group.querySelectorAll('.exercise').forEach(exercise => {
+              exercises.push({
+                name: exercise.querySelector('.exercise-name').textContent,
+                id: exercise.querySelector('.set-button').getAttribute('data-exercise')
+              });
+            });
+            
+            groups.push({
+              name: groupName,
+              exercises: exercises
+            });
+          });
+          
+          customCards.push({
+            title: title,
+            type: type,
+            groups: groups
+          });
+        }
+      });
+      
+      localStorage.setItem('customCards', JSON.stringify(customCards));
+    }
+
+    function loadCustomCards() {
+      const customCards = JSON.parse(localStorage.getItem('customCards') || '[]');
+      customCards.forEach(cardData => {
+        const card = createNewSessionCard(cardData.title, cardData.type, cardData.groups);
+        newSessionTemplate.parentNode.insertBefore(card, newSessionTemplate);
+      });
+    }
+
+    // Charger les cartes personnalisées au démarrage
+    document.addEventListener('DOMContentLoaded', () => {
+      loadCustomCards();
+      // ... rest of the existing DOMContentLoaded code ...
+    });
 
   </script>
 </body>
