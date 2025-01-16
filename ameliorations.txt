@@ -1,11 +1,11 @@
 Améliorations de l’Interface
 Voici les nouvelles améliorations que je souhaite appliquer sur cette application:
 Utilisateur (UI/UX)
-1.1. Cartes Jour
+1.1. Cartes Jour OK
 •	Dépliage des Cartes : Les cartes correspondant aux jours 1 à 5 doivent pouvoir se déplier de manière élégante. Lors de l’ouverture de l’application, les cartes devraient défiler avec des animations fluides pour une apparence plus esthétique et propre.
 •	Dépliage des Cartes de Session : Lors de l’exécution d’une session, la carte de la session en cours doit également se déplier pour afficher les détails pertinents.
 1.2. Présentation du Header
-•	Disposition du Header :
+•	Disposition du Header : OK
 •	Titre : Positionner le titre en haut du header.
 •	Temps de Repos et Chronomètre : Placer ces éléments directement en dessous du titre.
 •	Navigation : Aligner les trois écrans principaux (Réglages, Programme, Journal) horizontalement en dessous du chronomètre.
